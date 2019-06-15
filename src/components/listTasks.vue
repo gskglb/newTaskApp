@@ -1,9 +1,12 @@
 <template>
   <div>
-    <q-banner inline-actions class="text-white bg-red q-pa-md q-gutter-sm">
+    <div v-if="tasksList.length == 0" class="fixed-center text-white">
+        <div class="text-h6">Relax, nothing here</div>
+    </div>
+    <q-banner v-if="tasksList.length !== 0" inline-actions class="text-white bg-red q-pa-md q-gutter-sm">
       Tap on the task for details.
     </q-banner>
-    <q-list bordered separator dark>
+    <q-list v-if="tasksList.length !== 0" bordered separator dark>
       <q-item clickable v-ripple v-for="(record) in tasksList" v-bind:key="record.keyRef" @click.native="taskDetail(record)">
         <q-item-section>
           <q-item-label overline>{{record.start_date_time | formatDate}}</q-item-label>
