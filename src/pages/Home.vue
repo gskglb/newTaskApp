@@ -14,6 +14,7 @@
       <q-fab-action
         color="primary"
         icon="group_add"
+        @click.native="addProject"
       />
     </q-fab>
     <q-card dark class="bg-grey-10" text-color="white" flat square>
@@ -68,6 +69,9 @@ export default {
   methods: {
     async addTask () {
       this.$router.push('new')
+    },
+    async addProject () {
+      this.$router.push('newProject')
     }
   },
   created () {

@@ -1,47 +1,70 @@
 <template>
   <q-dialog v-model="showModal" minimized ref="modalRef">
-    <q-card flat square v-if="taskData !== null">
+    <q-card dark class="q-pa-xs bg-grey-9" text-color="white" flat square v-if="taskData !== null" style="width: 350px; max-width: 80vw;">
       <q-card-section>
         <div class="text-h6">Update Task</div>
+        <q-input dark label="Task *" v-model="taskData.title" stack-label
+          :rules="[ val => val && val.length > 0 || 'What is your task?']"
+        />
+        <q-input dark label="Summary *" type="textarea" rows="3" v-model="taskData.summary"  stack-label
+          :rules="[ val => val && val.length > 0 || 'Please add few lines about task']"
+        />
+        <q-input dark label="Expected Start Date / Time *" v-model="taskData.start_date_time"  stack-label>
+          <template dark v-slot:prepend>
+            <q-icon dark name="event" class="cursor-pointer">
+              <q-popup-proxy dark transition-show="scale" transition-hide="scale">
+                <q-date dark v-model="taskData.start_date_time" mask="YYYY-MM-DD HH:mm" stack-label/>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+          <template dark v-slot:append>
+            <q-icon dark name="access_time" class="cursor-pointer">
+              <q-popup-proxy dark transition-show="scale" transition-hide="scale">
+                <q-time dark v-model="taskData.start_date_time" mask="YYYY-MM-DD HH:mm" format24h/>
+              </q-popup-proxy>
+          </q-icon>
+          </template>
+        </q-input>
+        <q-input dark label="Expected Completion Date / Time (Optional)" v-model="taskData.end_date_time"  stack-label>
+          <template dark v-slot:prepend>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy transition-show="scale" transition-hide="scale">
+                <q-date dark v-model="taskData.end_date_time" mask="YYYY-MM-DD HH:mm"/>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+          <template dark v-slot:append>
+            <q-icon dark name="access_time" class="cursor-pointer">
+              <q-popup-proxy dark transition-show="scale" transition-hide="scale">
+                <q-time dark v-model="taskData.end_date_time" mask="YYYY-MM-DD HH:mm" format24h />
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+
+        <div class="row">
+          <p class="q-ma-sm">Percentage Completion</p>
+          <q-slider dark v-model="taskData.percentage_completion" label label-always snap  :min=0 :max=100 />
+        </div>
+        <div class="row no-wrap">
+          <q-checkbox v-model="taskData.urgent"  label="Urgent" /> &nbsp;
+          <q-checkbox  v-model="taskData.important"  label="Important" />
+        </div>
       </q-card-section>
       <q-separator />
-    <q-card-section>
-            <q-input v-model="taskData.title" placeholder="What is the task..." />
-            <q-input type="textarea" v-model="taskData.summary" placeholder="Summary of the task..." />
-            <q-datetime  v-model="taskData.start_date_time" type="datetime" placeholder="By when you want to start..." />
-            <q-datetime  v-model="taskData.end_date_time" type="datetime" placeholder="By when this task should complete..." />
-            <div class="row no-wrap">
-              <q-slider v-model="taskData.percentage_completion" label snap  :min="0" :max="100"/>
-            </div>
-          <div class="row no-wrap">
-            <q-checkbox  v-model="taskData.urgent"  label="Urgent" /> &nbsp;
-            <q-checkbox  v-model="taskData.important"  label="Important" />
-          </div>
-        <div class="row justify-center q-mt-md">
-        <q-btn flat no-caps class="bg-blue-grey-14"  text-color="white" @click="updateTask(taskData)" >
-            <span v-if="!loading">Update Task</span>
-            <q-spinner-dots v-else/>
-        </q-btn>
-        </div>
-    </q-card-section>
-          <q-separator />
 
-        <q-card-actions align="right">
-          <q-btn flat label="Cancel" color="primary" v-close-popup />
-          <q-btn flat label="Update" color="primary" v-close-popup />
-        </q-card-actions>
+      <q-card-actions align="right">
+        <q-btn flat no-caps label="Cancel" @click.native="cancelUpdate()" v-close-popup />
+        <q-btn no-caps  label="Update" @click.native="updateTask(taskData)" color="grey-10" v-close-popup />
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
-import { QSpinnerDots } from 'quasar'
-
 export default {
   name: 'UpdateTask',
   components: {
-    QSpinnerDots
   },
   props: {
     taskData: Object,
@@ -70,29 +93,16 @@ export default {
       } else {
         this.$q.notify({
           message: 'Task Updated',
-          color: 'blue-grey-14',
+          color: 'primary',
           textColor: 'white',
           icon: 'check'
         })
       }
       this.showModal = false
+      this.$bus.$emit('setEdit', {})
     },
-    async resetAll () {
-      this.taskData.title = ''
-      this.taskData.summary = ''
-      this.taskData.start_date_time = null
-      this.taskData.end_date_time = null
-      this.taskData.urgent = false
-      this.taskData.important = false
-    }
-  },
-  validations: {
-    taskData: {
-      title: { required },
-      summary: { required },
-      important: { required },
-      urgent: { required },
-      start_date_time: { required }
+    async cancelUpdate () {
+      this.$bus.$emit('setEdit', {})
     }
   },
   computed: {
@@ -108,7 +118,6 @@ export default {
   },
 
   mounted () {
-    console.log('I am in')
   }
 
 }

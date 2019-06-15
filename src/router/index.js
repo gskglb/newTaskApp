@@ -25,7 +25,6 @@ export default function (/* { store, ssrContext } */) {
   // check for auth
   Router.beforeEach((to, from, next) => {
     const currentUser = AUTH.currentUser
-    console.log('Current user is %o', currentUser)
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
     if (requiresAuth && !currentUser) {
       next('/login')

@@ -1,0 +1,142 @@
+<template>
+  <div>
+    <q-card dark class="bg-grey-10" text-color="white" flat square>
+      <q-card-section class="q-pa-sm">
+        <q-list bordered separator dark>
+          <q-item>
+            <q-item-section>
+              <q-item-label overline>START &nbsp;: {{task.start_date_time | formatDate}}</q-item-label>
+              <q-item-label overline>END &nbsp;&nbsp;&nbsp; : {{task.end_date_time | formatDate}}</q-item-label>
+              <!-- <q-item-label>{{record.title | limitTitle}}</q-item-label>
+              <q-item-label caption>{{record.summary | limitSummary}}</q-item-label> -->
+            </q-item-section>
+            <q-item-section side top>
+              <q-item-label caption>{{task.percentage_completion}} %</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+     <q-card-section class="q-pa-sm">
+        <div class="text-h6 text-justify">
+          {{task.title}}
+        </div>
+      </q-card-section>
+      <q-card-section class="q-pa-sm" >
+        <div class="text-body1 text-justify">{{task.summary}} </div>
+      </q-card-section>
+      <q-separator dark />
+      <q-card-section class="q-pa-sm" >
+          <!-- <q-btn no-caps label="Delegate" color="grey-7" text-color="white" class="full-width q-ma-sm"/> -->
+          <q-btn no-caps label="Edit" color="grey-8" text-color="white" class="full-width q-ma-sm" @click.native="editTaskFn"/>
+          <q-btn no-caps label="Add Notes" color="grey-9" class="full-width q-ma-sm" @click.native="addNotesFn(task)"/>
+          <q-btn no-caps label="Delete" color="red" text-color="white" class="full-width q-ma-sm" @click.native="deleteTask(task.keyRef)"/>
+      </q-card-section>
+      <q-separator dark />
+      <q-card-section class="q-pa-sm" v-show="task.notes" >
+        <q-expansion-item expand-separator label="Notes" >
+          <q-scroll-area style="height: 250px;">
+            <q-timeline responsive dark color="secondary">
+              <q-timeline-entry v-for="singleNote in task.notes"  v-bind:key="singleNote.added"
+                v-bind:subtitle="singleNote.added | formatDate">
+                <div>
+                  {{singleNote.text}}
+                </div>
+              </q-timeline-entry>
+            </q-timeline>
+          </q-scroll-area>
+        </q-expansion-item>
+      </q-card-section>
+    </q-card>
+    <q-dialog v-model="deleteConfirm" persistent>
+      <q-card dark class="q-pa-md bg-grey-9" text-color="white" flat square style="width: 300px; max-width: 80vw;">
+        <q-card-section class="row items-center">
+          <q-avatar size="30px" icon="block"  text-color="white" />
+          <span class="q-ml-sm">Are you Sure ?</span>
+        </q-card-section>
+        <q-card-actions align="center">
+          <q-btn flat no-caps label="Cancel" v-close-popup />
+          <q-btn no-caps color="red" label="Delete" @click="deleteTaskFn" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <UpdateTask v-bind:taskData="task" v-bind:showNotesModal="editTask" />
+    <AddNotesModal v-bind:taskData="task"  v-bind:showNotesModal="showNotes"/>
+
+  </div>
+</template>
+
+<script>
+import { date } from 'quasar'
+import UpdateTask from '../components/updateTask'
+import AddNotesModal from '../components/addNotesModal'
+
+export default {
+  name: 'TaskDetail',
+  props: {
+    task: Object
+  },
+  components: { UpdateTask, AddNotesModal },
+  data () {
+    return {
+      deleteConfirm: false,
+      showNotes: false,
+      editTask: false,
+      recordToManupulate: null
+    }
+  },
+  filters: {
+    formatDate: function (dateString) {
+      if (dateString !== null || dateString !== 'undefined') {
+        return date.formatDate(dateString, 'DD-MMM-YY @ h:mm A')
+      } else {
+        return 'Not Defined'
+      }
+    },
+    limitText: function (input) {
+      if (input.length < 30) {
+        return input
+      } else {
+        return input.substring(0, 30) + ' ...'
+      }
+    }
+
+  },
+  methods: {
+    async deleteTask (record) {
+      this.deleteConfirm = true
+      this.recordToManupulate = record
+    },
+    async deleteTaskFn () {
+      let keyRef = this.recordToManupulate.keyRef
+      this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + keyRef).remove()
+    },
+    async editTaskFn () {
+      this.editTask = true
+    },
+    async setEdit () {
+      console.log('me called why')
+      this.editTask = false
+    },
+    async addNotesFn (record) {
+      this.recordToManupulate = record
+      this.showNotes = true
+    },
+    async setNotesVisibilityValue () {
+      this.showNotes = false
+    }
+  },
+  created () {
+    this.$bus.$on('setNotesVisibility', this.setNotesVisibilityValue)
+    this.$bus.$on('setEdit', this.setEdit)
+    this.$bus.$emit('setTitleAndSlogan', { title: this.task.title, slogan: '' })
+  },
+  beforeDestroy () {
+    this.$bus.$off('setNotesVisibility', this.setNotesVisibilityValue)
+    this.$bus.$off('setEdit', this.setEdit)
+  }
+}
+
+</script>
+
+<style>
+</style>

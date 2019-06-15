@@ -16,8 +16,7 @@
     <div v-if="tasksList.length == 0" class="fixed-center text-white">
         <div class="text-h6">Relax, nothing here</div>
     </div>
-    <ListTasks v-bind:filter_option="filter_option" />
-      <!-- <q-card dark bordered class="bg-grey-9 my-card q-ma-sm" v-for="(record) in tasksList" v-bind:key="record.keyRef">
+      <q-card dark bordered class="bg-grey-9 my-card q-ma-sm" v-for="(record) in tasksList" v-bind:key="record.keyRef">
           <q-card-section class="q-pa-sm">
             <q-chip outline dense square text-color="white" >{{record.start_date_time  | formatDate}}</q-chip>
             <span v-show="record.end_date_time">
@@ -49,10 +48,11 @@
             expand-separator
             label="Notes"
             >
-            <q-scroll-area style="height: 150px;">
+            <q-scroll-area style="height: 200px;">
               <q-timeline responsive dark color="secondary">
                 <q-timeline-entry v-for="singleNote in record.notes"  v-bind:key="singleNote.added"
-                  v-bind:subtitle="singleNote.added | formatDate">
+                  v-bind:subtitle="singleNote.added | formatDate"
+                >
                   <div>
                     {{singleNote.text}}
                   </div>
@@ -62,7 +62,9 @@
           </q-expansion-item>
           </span>
         </q-card-section>
-      </q-card> -->
+      </q-card>
+    <UpdateTask v-bind:taskData="recordToManupulate" v-bind:showNotesModal="editTask" />
+    <AddNotesModal v-bind:taskData="recordToManupulate"  v-bind:showNotesModal="showNotes"/>
     <q-dialog v-model="deleteConfirm" persistent>
       <q-card class="q-pa-md" text-color="white" flat square style="width: 300px; max-width: 80vw;">
         <q-card-section class="row items-center">
@@ -75,9 +77,6 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <UpdateTask v-bind:taskData="recordToManupulate" v-bind:showNotesModal="editTask" />
-    <AddNotesModal v-bind:taskData="recordToManupulate"  v-bind:showNotesModal="showNotes"/>
-
   </q-page>
 </template>
 
@@ -85,16 +84,14 @@
 </style>
 
 <script>
-import _ from 'underscore'
 import { date } from 'quasar'
-import ListTasks from '../components/listTasks'
-
+import _ from 'underscore'
 import UpdateTask from '../components/updateTask'
 import AddNotesModal from '../components/addNotesModal'
 
 export default {
   name: 'PageIndex',
-  components: { ListTasks, UpdateTask, AddNotesModal },
+  components: { UpdateTask, AddNotesModal },
 
   data () {
     return {
@@ -117,8 +114,26 @@ export default {
   },
 
   methods: {
-    async setFilter (val) {
-      this.filter_option = val
+    async completeTask (record) {
+      record.completed = true
+      record.percentage_completion = 100
+      let errorHappened
+      await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + record.keyRef).update(record, function (error) {
+        errorHappened = error
+      })
+      if (errorHappened) {
+        this.$q.notify({
+          message: 'Error occured',
+          type: 'negative'
+        })
+      } else {
+        this.$q.notify({
+          message: 'Hurray... ',
+          color: 'blue-grey-14',
+          textColor: 'white',
+          icon: 'check'
+        })
+      }
     },
     async deleteTask (record) {
       this.deleteConfirm = true
@@ -128,20 +143,34 @@ export default {
       let keyRef = this.recordToManupulate.keyRef
       this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + keyRef).remove()
     },
+
     async editTaskFn (record) {
       this.recordToManupulate = record
       this.editTask = true
-    },
-    async setEdit () {
-      console.log('me called why')
-      this.editTask = false
     },
     async addNotesFn (record) {
       this.recordToManupulate = record
       this.showNotes = true
     },
+    async setFilterDate (val) {
+      this.filter_start_date_time = val
+    },
+    async setFilter (val) {
+      this.filter_option = val
+    },
+    async clearFilters () {
+      this.filter_start_date_time = '-1'
+      this.filter_priority = '-1'
+    },
+    async defaultFilters () {
+      this.filter_start_date_time = Date.now()
+    },
     async setNotesVisibilityValue () {
       this.showNotes = false
+    },
+    async setEdit (newValue) {
+      console.log('me called why')
+      this.editTask = false
     }
   },
   watch: {
@@ -171,11 +200,22 @@ export default {
           return element.completed === true
         })
       }
+      // if (this.filter_start_date_time !== '-1') {
+      //   tasksList = _.filter(tasksList, (element) => {
+      //     return date.formatDate(element.start_date_time, 'DDMMYYYY') === date.formatDate(this.filter_start_date_time, 'DDMMYYYY')
+      //   })
+      // }
       tasksList = _.sortBy(tasksList, 'start_date_time')
       return tasksList
     },
     completedTasksList: function () {
       return this.$store.getters['tasks/completedTasksList']
+    },
+    filterDateKey: function () {
+      return date.formatDate(this.filter_start_date_time, 'DD-MM-YYYY')
+    },
+    sortedNotes: function (notes) {
+      return _.sortBy(notes, 'added')
     }
   },
 
@@ -194,18 +234,25 @@ export default {
       } else {
         return input.substring(0, 30) + ' ...'
       }
-    }
+    },
 
+    delayCheck: function (startDateTime) {
+      let timeStamp = Date.now()
+      let taskDate = new Date(startDateTime)
+      let diff = date.getDateDiff(timeStamp, taskDate, 'seconds')
+      if (diff > 0) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
 
   created () {
     this.$bus.$on('setNotesVisibility', this.setNotesVisibilityValue)
     this.$bus.$on('setEdit', this.setEdit)
     this.$bus.$emit('setTitleAndSlogan', { title: 'Tasks', slogan: '' })
-  },
-  beforeDestroy () {
-    this.$bus.$off('setNotesVisibility', this.setNotesVisibilityValue)
-    this.$bus.$off('setEdit', this.setEdit)
   }
+
 }
 </script>

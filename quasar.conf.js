@@ -66,7 +66,9 @@ module.exports = function (ctx) {
         'QTimeline',
         'QTimelineEntry',
         'QDialog',
-        'QBtnDropdown'
+        'QBtnDropdown',
+        'QSlider',
+        'QBanner'
       ],
 
       directives: [
@@ -198,6 +200,8 @@ module.exports = function (ctx) {
         // https://www.electron.build/configuration/configuration
 
         // appId: 'quasar-app'
+        vueRouterMode: 'history',
+        publicPath: __dirname
       }
     }
   }

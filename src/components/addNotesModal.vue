@@ -1,17 +1,13 @@
 <template>
-  <q-dialog v-model="showModal">
-    <q-card flat square v-if="taskData !== null">
-      <q-card-section>
+  <q-dialog v-model="showModal" persistent >
+    <q-card dark class="q-pa-md bg-grey-9" flat square v-if="taskData !== null" style="width: 300px; max-width: 80vw;">
+      <q-card-section dark>
         <div class="text-h6">Add Note</div>
+        <q-input dark type="textarea" v-model="notesText"/>
       </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <q-input type="textarea" v-model="notesText" no-border/>
-      </q-card-section>
-      <q-separator />
-        <q-card-actions align="right">
+        <q-card-actions dark align="right">
           <q-btn flat label="Cancel" @click.native="cancel" v-close-popup />
-          <q-btn flat label="Update" color="primary" @click.native="addNotes" v-close-popup />
+          <q-btn label="Update" color="grey-10" @click.native="addNotes" v-close-popup />
         </q-card-actions>
     </q-card>
   </q-dialog>

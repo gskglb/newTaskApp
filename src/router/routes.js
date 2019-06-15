@@ -24,9 +24,11 @@ const routes = [
       requiresAuth: true
     },
     children: [
+      { path: 'newProject', component: () => import('pages/NewProject.vue') },
       { path: 'new', component: () => import('pages/NewTask.vue') },
-      { path: 'home', component: () => import('pages/Home.vue') },
-      { path: 'list', component: () => import('pages/List.vue') }
+      { path: 'home', name: 'home', component: () => import('pages/Home.vue') },
+      { path: 'list', component: () => import('pages/List.vue') },
+      { path: 'taskDetail', name: 'taskDetail', component: () => import('pages/TaskDetail') }
     ]
   }
 ]

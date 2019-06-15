@@ -130,6 +130,10 @@ export default {
     tasksRef.once('value', (snap) => {
       // console.log('initial data loaded!', snap.numChildren() === count)
     })
+  },
+
+  beforeDestroy () {
+    this.$bus.$off('setTitleAndSlogan', this.setTitleAndSlogan)
   }
 }
 </script>
