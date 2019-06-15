@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import tasks from './tasks'
 import user from './user'
+import projects from './projects'
 
 Vue.use(Vuex)
 
@@ -15,7 +16,8 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       tasks,
-      user
+      user,
+      projects
     }
   })
 

@@ -130,6 +130,22 @@ export default {
     tasksRef.once('value', (snap) => {
       // console.log('initial data loaded!', snap.numChildren() === count)
     })
+    // Register firebase events
+    let projectsRef = this.$db.ref('/profiles/' + this.$auth.currentUser.uid + '/groups/')
+    projectsRef.on('child_added', (data) => {
+      this.$store.dispatch('projects/projectAdded', data)
+    })
+
+    projectsRef.on('child_changed', (data) => {
+      this.$store.dispatch('projects/projectChanged', data)
+    })
+
+    projectsRef.on('child_removed', (data) => {
+      this.$store.dispatch('projects/projectDeleted', data)
+    })
+
+    projectsRef.once('value', (snap) => {
+    })
   },
 
   beforeDestroy () {
