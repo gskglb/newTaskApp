@@ -101,6 +101,7 @@ export default {
       await this.$auth.signOut().then(function () {
         console.error('Sign Out good')
         store.dispatch('tasks/flush')
+        store.dispatch('projects/flush')
         router.push('/')
       }, function (error) {
         console.log('Sign Out Error %o', error)
@@ -133,7 +134,14 @@ export default {
     // Register firebase events
     let projectsRef = this.$db.ref('/profiles/' + this.$auth.currentUser.uid + '/groups/')
     projectsRef.on('child_added', (data) => {
-      this.$store.dispatch('projects/projectAdded', data)
+      let grpID = data.val()
+      console.log('new group added %o', grpID)
+      let store = this.$store
+      this.$db.ref('/projects/' + grpID + '/').once('value').then(function (snapshot) {
+        if (snapshot.val() !== null) {
+          store.dispatch('projects/projectAdded', snapshot)
+        }
+      })
     })
 
     projectsRef.on('child_changed', (data) => {

@@ -51,11 +51,15 @@
 
 <script>
 import { QSpinnerDots } from 'quasar'
+import _ from 'underscore'
 
 export default {
   name: 'NewTask',
   components: {
     QSpinnerDots
+  },
+  props: {
+    groupId: String
   },
   data () {
     return {
@@ -88,15 +92,24 @@ export default {
   },
   methods: {
     async addTask () {
-      console.log('called')
-      this.loading = true
       let errorInUpdate
-      let keyRef = await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/').push()
-      console.log(keyRef)
-      this.taskData.keyRef = keyRef.key
-      await keyRef.set(this.taskData, function (error) {
-        errorInUpdate = error
-      })
+      this.loading = true
+      console.log(this.groupId)
+      if (_.isUndefined(this.groupId)) {
+        console.log('Adding self task')
+        let keyRef = await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/').push()
+        this.taskData.keyRef = keyRef.key
+        await keyRef.set(this.taskData, function (error) {
+          errorInUpdate = error
+        })
+      } else {
+        console.log('Adding group task')
+        let keyRef = await this.$db.ref('/projects/' + this.groupId + '/tasks/').push()
+        this.taskData.keyRef = keyRef.key
+        await keyRef.set(this.taskData, function (error) {
+          errorInUpdate = error
+        })
+      }
       if (errorInUpdate != null) {
         this.$q.notify({
           message: 'Error occured',
@@ -105,10 +118,10 @@ export default {
       } else {
         this.$q.notify({
           message: 'Task added',
-          color: 'blue-grey-14',
+          color: 'primary',
           textColor: 'white'
         })
-        this.$router.push('list')
+        this.$router.go(-1)
       }
       this.loading = false
     }

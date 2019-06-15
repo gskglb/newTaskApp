@@ -19,15 +19,21 @@
     </q-fab>
     <SelfTaskSummary />
     <q-separator dark />
+    <div class="q-pa-xs">
+      <JoinGroup />
+    </div>
+    <q-separator dark />
+    <GroupsList />
   </q-page>
 </template>
 
 <script>
 import SelfTaskSummary from '../components/selfTaskSummary'
-
+import GroupsList from '../components/listProjects'
+import JoinGroup from '../components/joinGroup'
 export default {
   name: 'HomePage',
-  components: { SelfTaskSummary },
+  components: { SelfTaskSummary, GroupsList, JoinGroup },
   methods: {
     async addTask () {
       this.$router.push('new')

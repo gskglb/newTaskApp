@@ -57,6 +57,7 @@ export default {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
         this.loading = true
+        // this.$auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
         await this.$auth.signInWithEmailAndPassword(this.form.email, this.form.password)
           .then((result) => {
             if (result.user !== null) {

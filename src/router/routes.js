@@ -26,9 +26,11 @@ const routes = [
     children: [
       { path: 'newProject', component: () => import('pages/NewProject.vue') },
       { path: 'new', component: () => import('pages/NewTask.vue') },
+      { path: 'newGroupTask', component: () => import('pages/NewGroupTask.vue') },
       { path: 'home', name: 'home', component: () => import('pages/Home.vue') },
       { path: 'list', component: () => import('pages/List.vue') },
-      { path: 'taskDetail', name: 'taskDetail', component: () => import('pages/TaskDetail') }
+      { path: 'taskDetail', name: 'taskDetail', component: () => import('pages/TaskDetail') },
+      { path: 'projectDetail', name: 'projectDetail', component: () => import('pages/ProjectDetail') }
     ]
   }
 ]

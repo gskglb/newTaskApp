@@ -1,9 +1,16 @@
 <template>
   <q-form @submit="addProject">
+    <q-input label="Participant Code" readonly dark filled v-model="joiningRef" class="q-ma-sm" stack-label
+      :rules="[ val => val && val.length > 0 || 'Project / Group Name is required']"
+    />
+    <q-banner class="bg-grey-3">
+      You should provide this participant code to people who want to join this group
+    </q-banner>
+
     <q-input label="Project / Group Name  *" dark v-model="prj.name" class="q-ma-sm" stack-label
       :rules="[ val => val && val.length > 0 || 'Project / Group Name is required']"
     />
-    <q-input label="Description *" dark type="textarea" rows="2" v-model="prj.description" class="q-ma-sm" stack-label
+    <q-input label="Purpose of the group *" dark type="textarea" rows="2" v-model="prj.description" class="q-ma-sm" stack-label
       :rules="[ val => val && val.length > 0 || 'Please add few lines about project / group']"
     />
   <q-btn color="primary" type="submit" class="full-width q-mt-md" >
@@ -14,7 +21,7 @@
 </template>
 
 <script>
-import { QSpinnerDots } from 'quasar'
+import { QSpinnerDots, date } from 'quasar'
 
 export default {
   name: 'NewProject',
@@ -25,6 +32,7 @@ export default {
     return {
       prj: {
         keyRef: '',
+        participantCode: '',
         name: '',
         description: '',
         status: false,
@@ -34,10 +42,17 @@ export default {
       loading: false
     }
   },
+  computed: {
+    joiningRef: function () {
+      let dateString = new Date()
+      return date.formatDate(dateString, 'DDMMhhmmSS')
+    }
+  },
   methods: {
     async addProject () {
       this.loading = true
       let errorInUpdate
+      this.prj.participantCode = this.joiningRef
       if (this.prj.members == null) {
         this.prj.members = []
       }
@@ -74,7 +89,7 @@ export default {
           color: 'primary',
           textColor: 'white'
         })
-        this.$router.push('list')
+        this.$router.go(-1)
       }
       this.loading = false
     }

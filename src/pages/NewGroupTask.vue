@@ -25,7 +25,7 @@ export default {
     }
   },
   created () {
-    this.$bus.$emit('setTitleAndSlogan', { title: 'Self Task', slogan: '' })
+    this.$bus.$emit('setTitleAndSlogan', { title: 'Group Task', slogan: '' })
   }
 
 }
