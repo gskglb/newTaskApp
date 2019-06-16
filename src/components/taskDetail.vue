@@ -28,8 +28,8 @@
       <q-card-section class="q-pa-sm" >
           <!-- <q-btn no-caps label="Delegate" color="grey-7" text-color="white" class="full-width q-ma-sm"/> -->
           <q-btn no-caps label="Edit" color="grey-8" text-color="white" class="full-width q-ma-sm" @click.native="editTaskFn"/>
-          <q-btn no-caps label="Add Notes" color="grey-9" class="full-width q-ma-sm" @click.native="addNotesFn(task)"/>
-          <q-btn no-caps label="Delete" color="red" text-color="white" class="full-width q-ma-sm" @click.native="deleteTask(task.keyRef)"/>
+          <q-btn no-caps label="Add Notes" color="grey-9" class="full-width q-ma-sm" @click.native="addNotesFn"/>
+          <q-btn no-caps label="Delete" color="red" text-color="white" class="full-width q-ma-sm" @click.native="deleteTask"/>
       </q-card-section>
       <q-separator dark />
       <q-card-section class="q-pa-sm" v-show="task.notes" >
@@ -102,23 +102,27 @@ export default {
 
   },
   methods: {
-    async deleteTask (record) {
+    async deleteTask () {
       this.deleteConfirm = true
-      this.recordToManupulate = record
     },
     async deleteTaskFn () {
-      let keyRef = this.recordToManupulate.keyRef
+      let keyRef = this.task.keyRef
       this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + keyRef).remove()
+      this.$q.notify({
+        message: 'Task Deleted',
+        color: 'primary',
+        textColor: 'white',
+        icon: 'check'
+      })
+      this.$router.go(-1)
     },
     async editTaskFn () {
       this.editTask = true
     },
     async setEdit () {
-      console.log('me called why')
       this.editTask = false
     },
-    async addNotesFn (record) {
-      this.recordToManupulate = record
+    async addNotesFn () {
       this.showNotes = true
     },
     async setNotesVisibilityValue () {

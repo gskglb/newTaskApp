@@ -1,7 +1,13 @@
 <template>
   <div class="q-pa-xs">
     <q-list v-if="groupsList.length !== 0" separator dark>
-      <q-item-label header>Your Groups / Projects</q-item-label>
+      <q-bar class="bg-grey-10 text-white">
+        <div>
+          Your Groups / Projects
+        </div>
+        <q-space />
+        <q-btn no-caps flat color="primary" label="Create New Group" @click="newGroup" />
+      </q-bar>
       <q-item clickable v-ripple v-for="(record) in groupsList" v-bind:key="record.keyRef" @click.native="projectDetail(record)">
         <q-item-section>
           <q-item-label>{{record.name}}</q-item-label>
@@ -29,6 +35,9 @@ export default {
   methods: {
     projectDetail (record) {
       this.$router.push({ name: 'projectDetail', params: { project: record } })
+    },
+    async newGroup () {
+      this.$router.push('newProject')
     }
   }
 }

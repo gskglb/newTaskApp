@@ -1,26 +1,24 @@
 <template>
-  <q-card dark class="bg-grey-9">
-    <q-form @submit="joinGroup">
-      <q-input dark label="Participant Code *" v-model="participantCode" class="q-ml-md q-mr-md" stack-label
-        :rules="[ val => val && val.length > 0 || 'Participant Code is needed']"
-      />
-      <p dark class="q-ml-md q-mr-md">{{this.message}}</p>
-      <q-btn dark no-caps outline size="md" type="submit" class="q-ma-sm">
-          <span v-if="!loading">Join Group</span>
-          <q-spinner-dots v-else/>
-      </q-btn>
-    </q-form>
-  </q-card>
+    <q-list dark>
+      <q-item>
+        <q-item-section>
+          <q-item-label overline>To join group, enter participant code</q-item-label>
+          <q-item-label>
+            <q-form @submit="joinGroup">
+            <q-input dark filled dense v-model="participantCode"
+              :rules="[ val => val && val.length > 0 || 'Participant Code is needed']"
+            />
+            </q-form>
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+    </q-list>
 </template>
 
 <script>
-import { QSpinnerDots } from 'quasar'
 
 export default {
   name: 'JoinGroup',
-  components: {
-    QSpinnerDots
-  },
   props: {
     groupId: String
   },
@@ -36,20 +34,48 @@ export default {
       this.loading = true
       let projectRef = await this.$db.ref('/projects/')
       let that = this
-      // let groupKey = null
-      projectRef.orderByChild('participantCode').equalTo(this.participantCode).on('value', function (snapShot) {
+      let exists = false
+      let groupKey = null
+      await projectRef.orderByChild('participantCode').equalTo(this.participantCode).once('value', function (snapShot) {
         if (snapShot.val() === null) {
-          that.message = 'No groups found with this participant code'
+          that.$q.notify({
+            message: 'Incorrect participant code',
+            color: 'negative',
+            textColor: 'white',
+            icon: 'info'
+          })
         } else {
           snapShot.forEach(function (data) {
+            groupKey = data.key
             let groupRef = that.$db.ref('/projects/' + data.key + '/members/')
-            let keyRef = groupRef.push()
-            keyRef.set({ id: that.$auth.currentUser.uid }, function (error) {
-              console.log(error)
+            groupRef.orderByChild('members').once('value', function (memSnapShot) {
+              memSnapShot.forEach(function (memberData) {
+                if (that.$auth.currentUser.uid === memberData.val().id) {
+                  console.log('there')
+                  exists = true
+                }
+              })
             })
           })
         }
       })
+      console.log(exists)
+      if (!exists) {
+        that.$db.ref('/projects/' + groupKey + '/members/').push({ 'id': that.$auth.currentUser.uid, 'added': new Date() })
+        that.$q.notify({
+          message: 'You are added to group',
+          color: 'primary',
+          textColor: 'white',
+          icon: 'info'
+        })
+      } else {
+        that.$q.notify({
+          message: 'You are already member of this group',
+          color: 'negative',
+          textColor: 'white',
+          icon: 'info'
+        })
+      }
       this.loading = false
     }
   }
