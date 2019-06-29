@@ -1,7 +1,12 @@
 <template>
     <q-list dark>
+      <q-bar class="bg-grey-10 text-white">
+        <q-space />
+        <q-btn no-caps flat color="primary" label="Join Group" v-if="!show" @click="show=true" />
+        <q-btn no-caps flat color="primary" label="x" v-if="show" @click="show=false" />
+      </q-bar>
       <q-item>
-        <q-item-section>
+        <q-item-section v-if="this.show">
           <q-item-label overline>To join group, enter participant code</q-item-label>
           <q-item-label>
             <q-form @submit="joinGroup">
@@ -24,6 +29,7 @@ export default {
   },
   data () {
     return {
+      show: false,
       participantCode: '',
       loading: false,
       message: ''
@@ -51,32 +57,34 @@ export default {
             groupRef.orderByChild('members').once('value', function (memSnapShot) {
               memSnapShot.forEach(function (memberData) {
                 if (that.$auth.currentUser.uid === memberData.val().id) {
-                  console.log('there')
                   exists = true
                 }
               })
+              if (!exists) {
+                that.addToGroup(groupKey)
+              } else {
+                that.$q.notify({
+                  message: 'You are already member of this group',
+                  color: 'red',
+                  textColor: 'white',
+                  icon: 'error'
+                })
+              }
             })
           })
         }
       })
-      console.log(exists)
-      if (!exists) {
-        that.$db.ref('/projects/' + groupKey + '/members/').push({ 'id': that.$auth.currentUser.uid, 'added': new Date() })
-        that.$q.notify({
-          message: 'You are added to group',
-          color: 'primary',
-          textColor: 'white',
-          icon: 'info'
-        })
-      } else {
-        that.$q.notify({
-          message: 'You are already member of this group',
-          color: 'negative',
-          textColor: 'white',
-          icon: 'info'
-        })
-      }
       this.loading = false
+    },
+    async addToGroup (groupKey) {
+      console.log('adding now %o', groupKey)
+      this.$db.ref('/projects/' + groupKey + '/members/').push({ 'id': this.$auth.currentUser.uid, 'added': new Date() })
+      this.$q.notify({
+        message: 'You are added to group',
+        color: 'primary',
+        textColor: 'white',
+        icon: 'info'
+      })
     }
   }
 }
