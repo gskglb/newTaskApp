@@ -1,52 +1,67 @@
 <template>
   <q-page class="bg-grey-10" style="margin-top:0px">
-  <!-- <q-fab
-    class="fixed"
-    style="right: 18px; bottom: 18px"
-    color="primary"
-    direction="up"
-    icon="add">
-      <q-fab-action label="New Task"
-        color="primary"
-        icon="playlist_add"
-        @click.native="addTask"
-      />
-      <q-fab-action
-        color="primary"
-        icon="group_add"
-        @click.native="addProject"
-      />
-    </q-fab> -->
-    <SelfTaskSummary />
-    <q-separator dark />
-    <div class="q-pa-xs">
-      <JoinGroup />
-    </div>
-    <q-separator dark />
-    <GroupsList />
+    <q-card dark class="bg-grey-10" text-color="white" flat square>
+      <q-card-section>
+        <q-bar class="bg-grey-10 text-white">
+          <div class="text-h6">Filters</div>
+          <q-space />
+          <q-btn no-caps color="grey-9" label="New Task" @click="$router.push('new')" />
+        </q-bar>
+      </q-card-section>
+      <q-card-section>
+        <q-select dark
+            v-model = "filter_option"
+            :options="options"
+            @input="setFilter"
+        />
+      </q-card-section>
+    </q-card>
+    <ListTasks v-bind:filter_option="filter_option" />
   </q-page>
 </template>
 
+<style>
+</style>
+
 <script>
-import SelfTaskSummary from '../components/selfTaskSummary'
-import GroupsList from '../components/listProjects'
-import JoinGroup from '../components/joinGroup'
+import ListTasks from '../components/listTasks'
+
 export default {
-  name: 'HomePage',
-  components: { SelfTaskSummary, GroupsList, JoinGroup },
-  // methods: {
-  //   async addTask () {
-  //     this.$router.push('new')
-  //   },
-  //   async addProject () {
-  //     this.$router.push('newProject')
-  //   }
-  // },
+  name: 'PageIndex',
+  components: { ListTasks },
+
+  data () {
+    return {
+      filter_start_date_time: '-1',
+      filter_priority: '-1',
+      filter_selected_priority: 'All',
+      filter_option: { label: 'Urgent and Important - Do it now', value: '1' },
+      options: [
+        { label: 'All Open Tasks', value: '-1' },
+        { label: 'Urgent and Important - Do it now', value: '1' },
+        { label: 'Important but Not urgent - Do it later', value: '2' },
+        { label: 'Urgent but not important - Delegate', value: '3' },
+        { label: 'Neither urgent not important - Drop', value: '4' }
+      ]
+    }
+  },
+
+  methods: {
+    async setFilter (val) {
+      this.filter_option = val
+    }
+  },
+  watch: {
+  },
+
+  computed: {
+  },
+
+  filters: {
+  },
+
   created () {
-    this.$bus.$emit('setTitleAndSlogan', { title: 'Home', slogan: '' })
+    this.$bus.$emit('setTitleAndSlogan', { title: 'Tasks', slogan: '' })
   }
 }
 </script>
-
-<style>
-</style>

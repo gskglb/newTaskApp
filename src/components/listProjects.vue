@@ -6,7 +6,7 @@
           Your Groups / Projects
         </div>
         <q-space />
-        <q-btn no-caps flat color="primary" label="Create New Group" @click="newGroup" />
+        <q-btn no-caps color="grey-9" label="Create New Group" @click="newGroup" />
       </q-bar>
       <q-item clickable v-ripple v-for="(record) in groupsList" v-bind:key="record.keyRef" @click.native="projectDetail(record)">
         <q-item-section>

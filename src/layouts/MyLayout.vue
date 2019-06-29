@@ -9,14 +9,20 @@
         <q-toolbar-title>
           {{this.title}}
         </q-toolbar-title>
-        <q-btn flat dense round aria-label="New" @click.native="$router.push('new')">
+        <!-- <q-btn flat dense round aria-label="New" @click.native="$router.push('new')">
           <q-icon name="person" />
-        </q-btn>
+        </q-btn> -->
         <q-btn flat dense round aria-label="Exit" @click.native="signOut">
           <q-icon name="exit_to_app" />
         </q-btn>
-
       </q-toolbar>
+        <q-tabs
+          inline-label
+          class="bg-grey-9 text-white"
+        >
+          <q-route-tab no-caps to="home" name="mails" label="Self" exact/>
+          <q-route-tab no-caps to="group_home" name="alarms" label="Groups" exact/>
+        </q-tabs>
     </q-header>
 
     <q-drawer
@@ -135,7 +141,6 @@ export default {
     let projectsRef = this.$db.ref('/profiles/' + this.$auth.currentUser.uid + '/groups/')
     projectsRef.on('child_added', (data) => {
       let grpID = data.val()
-      console.log('new group added %o', grpID)
       let store = this.$store
       this.$db.ref('/projects/' + grpID + '/').once('value').then(function (snapshot) {
         if (snapshot.val() !== null) {

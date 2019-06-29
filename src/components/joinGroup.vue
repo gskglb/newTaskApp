@@ -1,18 +1,14 @@
 <template>
     <q-list dark>
-      <q-bar class="bg-grey-10 text-white">
-        <q-space />
-        <q-btn no-caps flat color="primary" label="Join Group" v-if="!show" @click="show=true" />
-        <q-btn no-caps flat color="primary" label="x" v-if="show" @click="show=false" />
-      </q-bar>
       <q-item>
-        <q-item-section v-if="this.show">
+        <q-item-section>
           <q-item-label overline>To join group, enter participant code</q-item-label>
           <q-item-label>
             <q-form @submit="joinGroup">
             <q-input dark filled dense v-model="participantCode"
               :rules="[ val => val && val.length > 0 || 'Participant Code is needed']"
             />
+            <q-btn type="submit" no-caps label="Join" color="grey-8" text-color="white" class="full-width q-mb-xs"/>
             </q-form>
           </q-item-label>
         </q-item-section>

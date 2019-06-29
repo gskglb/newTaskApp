@@ -3,7 +3,7 @@
     <div v-if="tasksList.length == 0" class="fixed-center text-white">
         <div class="text-h6">Relax, nothing here</div>
     </div>
-    <q-banner v-if="tasksList.length !== 0" inline-actions class="text-white bg-red q-pa-md q-gutter-sm">
+    <q-banner v-if="tasksList.length !== 0" inline-actions class="text-white bg-grey-9 q-mb-xs">
       Tap on the task for details.
     </q-banner>
     <q-list v-if="tasksList.length !== 0" bordered separator dark>
