@@ -25,7 +25,7 @@ export default {
     }
   },
   created () {
-    this.$bus.$emit('setTitleAndSlogan', { title: 'New Project', slogan: '' })
+    this.$bus.$emit('setTitleAndSlogan', { title: 'New Group', slogan: '' })
   }
 
 }

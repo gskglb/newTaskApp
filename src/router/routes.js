@@ -8,6 +8,13 @@ const routes = [
     ]
   },
   {
+    path: '/signUp',
+    component: () => import('layouts/NoLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/SignUp.vue') }
+    ]
+  },
+  {
     path: '/profile',
     component: () => import('layouts/NoLayout.vue'),
     meta: {
@@ -28,7 +35,7 @@ const routes = [
       { path: 'new', component: () => import('pages/NewTask.vue') },
       { path: 'newGroupTask', component: () => import('pages/NewGroupTask.vue') },
       { path: 'home', name: 'home', component: () => import('pages/Home.vue') },
-      { path: 'group_home', name: 'home', component: () => import('pages/GroupHome.vue') },
+      { path: 'group_home', name: 'group_home', component: () => import('pages/GroupHome.vue') },
       { path: 'taskDetail', name: 'taskDetail', component: () => import('pages/TaskDetail') },
       { path: 'projectDetail', name: 'projectDetail', component: () => import('pages/ProjectDetail') }
     ]

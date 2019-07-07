@@ -42,7 +42,7 @@
       <q-checkbox dark v-model="taskData.urgent" label="Urgent" class="q-mr-md"/>
       <q-checkbox dark v-model="taskData.important" label="Important" />
     </div>
-  <q-btn color="primary" type="submit" class="full-width q-mt-md" >
+  <q-btn color="grey-9" type="submit" class="full-width q-mt-md" >
       <span v-if="!loading">Add Task</span>
       <q-spinner-dots v-else/>
   </q-btn>

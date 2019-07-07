@@ -13,11 +13,11 @@
             :error="$v.form.password.$error" />
           <!-- <p v-if="$v.form.password.$error">The input is needed!</p> -->
           <div class="row no-wrap">
-            <q-btn color="primary" type="submit" class="q-mr-sm">
+            <q-btn no-caps color="grey-9" type="submit" class="q-mr-sm">
               <span v-if="!loading">Sign In</span>
               <q-spinner-dots v-else/>
             </q-btn>
-            <q-btn color="blue-grey-14" no-caps outline @click="$router.push('signUp')" >Sign Up</q-btn>
+            <q-btn color="grey-8" no-caps outline @click="$router.push('signUp')" >Sign Up</q-btn>
           </div>
         </q-form>
       </q-card-section>
@@ -37,8 +37,8 @@ export default {
   data () {
     return {
       form: {
-        email: 'guru4raj@gmail.com',
-        password: 'test123'
+        email: '',
+        password: ''
       },
       loading: false
     }
@@ -78,7 +78,7 @@ export default {
             if (error.code === 'auth/network-request-failed') {
               this.$q.notify(error.message)
             } else {
-              this.$q.notify('Email / password not correct. Please check')
+              this.$q.notify({ message: 'Email / password not correct. Please check', color: 'negative' })
             }
           })
         this.loading = false

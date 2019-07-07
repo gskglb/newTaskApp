@@ -47,7 +47,7 @@
           <q-slider dark v-model="taskData.percentage_completion" label label-always snap  :min=0 :max=100 />
         </div>
         <div class="row no-wrap">
-          <q-checkbox v-model="taskData.urgent"  label="Urgent" /> &nbsp;
+          <q-checkbox  v-model="taskData.urgent"  label="Urgent" /> &nbsp;
           <q-checkbox  v-model="taskData.important"  label="Important" />
         </div>
       </q-card-section>
@@ -93,7 +93,7 @@ export default {
       } else {
         this.$q.notify({
           message: 'Task Updated',
-          color: 'primary',
+          color: 'grey-9',
           textColor: 'white',
           icon: 'check'
         })

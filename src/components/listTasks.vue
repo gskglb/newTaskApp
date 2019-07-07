@@ -3,19 +3,20 @@
     <div v-if="tasksList.length == 0" class="fixed-center text-white">
         <div class="text-h6">Relax, nothing here</div>
     </div>
-    <q-banner v-if="tasksList.length !== 0" inline-actions class="text-white bg-grey-9 q-mb-xs">
+    <!-- <q-banner v-if="tasksList.length !== 0" inline-actions class="text-white bg-grey-9 q-mb-xs">
       Tap on the task for details.
-    </q-banner>
-    <q-list v-if="tasksList.length !== 0" bordered separator dark>
-      <q-item clickable v-ripple v-for="(record) in tasksList" v-bind:key="record.keyRef" @click.native="taskDetail(record)">
+    </q-banner> -->
+    <q-list v-if="tasksList.length !== 0"  dark>
+      <q-item class="q-mb-xs" color="grey-9" clickable  v-ripple v-for="(record) in tasksList" v-bind:key="record.keyRef" @click.native="taskDetail(record)">
         <q-item-section>
-          <q-item-label overline>{{record.start_date_time | formatDate}}</q-item-label>
+          <!-- <q-item-label overline>{{record.start_date_time | formatDate}}</q-item-label> -->
           <q-item-label>{{record.title | limitTitle}}</q-item-label>
-          <q-item-label caption>{{record.summary | limitSummary}}</q-item-label>
+          <!-- <q-item-label caption>{{record.summary | limitSummary}}</q-item-label> -->
         </q-item-section>
         <q-item-section side top>
           <q-item-label caption>{{record.percentage_completion}} %</q-item-label>
         </q-item-section>
+      <q-separator spaced dark />
       </q-item>
     </q-list>
   </div>

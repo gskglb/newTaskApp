@@ -1,24 +1,55 @@
 <template>
-  <div class="q-pa-xs">
-    <q-list v-if="groupsList.length !== 0" separator dark>
-      <q-bar class="bg-grey-10 text-white">
-        <div>
-          Your Groups / Projects
+      <!-- <q-list>
+        <q-item-label header>Groups</q-item-label>
+        <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
+          <q-item-section avatar>
+            <q-icon name="school" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Docs</q-item-label>
+            <q-item-label caption>quasar.dev</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list> -->
+    <q-list>
+      <q-item>
+        <q-item-section>
+          <q-item-label>
+            <div class="text-subtitle2">
+            Quick Menu
+            </div>
+          </q-item-label>
+        </q-item-section>
+        <!-- <q-item-section side>
+          <q-icon color="grey-9" name="keyboard_arrow_right" />
+        </q-item-section> -->
+      </q-item>
+
+      <q-item clickable v-ripple @click.native="$router.push('home')">
+        <q-item-section>
+          <q-item-label>Home</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-icon color="grey-9" name="keyboard_arrow_right" />
+        </q-item-section>
+      </q-item>
+      <div class="row">
+        <div class="col-4">
+          <q-item-label header>Groups</q-item-label>
         </div>
-        <q-space />
-        <q-btn no-caps color="grey-9" label="Create New Group" @click="newGroup" />
-      </q-bar>
+        <div class="col-8  q-pa-sm">
+          <q-btn no-caps outline size="sm" class="float-right  q-pa-xs" color="grey-9" label="New Group" @click="newGroup" />
+        </div>
+      </div>
       <q-item clickable v-ripple v-for="(record) in groupsList" v-bind:key="record.keyRef" @click.native="projectDetail(record)">
         <q-item-section>
           <q-item-label>{{record.name}}</q-item-label>
         </q-item-section>
         <q-item-section side>
-          <q-icon color="primary" name="keyboard_arrow_right" />
+          <q-icon color="grey-9" name="keyboard_arrow_right" />
         </q-item-section>
       </q-item>
     </q-list>
-
-  </div>
 </template>
 
 <script>

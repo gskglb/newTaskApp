@@ -1,8 +1,8 @@
 <template>
   <div>
     <q-card dark class="bg-grey-10" text-color="white" flat square>
-      <q-card-section class="q-pa-sm">
-        <q-list bordered separator dark>
+      <q-card-section>
+        <q-list dark>
           <q-item>
             <q-item-section>
               <q-item-label overline>START &nbsp;: {{task.start_date_time | formatDate}}</q-item-label>
@@ -17,34 +17,36 @@
         </q-list>
       </q-card-section>
      <q-card-section class="q-pa-sm">
-        <div class="text-h6 text-justify">
+        <div class="text-justify">
           {{task.title}}
         </div>
       </q-card-section>
       <q-card-section class="q-pa-sm" >
-        <div class="text-body1 text-justify">{{task.summary}} </div>
+        <div class="text-justify">{{task.summary}} </div>
       </q-card-section>
       <q-separator dark />
       <q-card-section class="q-pa-sm" >
-          <!-- <q-btn no-caps label="Delegate" color="grey-7" text-color="white" class="full-width q-ma-sm"/> -->
-          <q-btn no-caps label="Edit" color="grey-8" text-color="white" class="full-width q-ma-sm" @click.native="editTaskFn"/>
-          <q-btn no-caps label="Add Notes" color="grey-9" class="full-width q-ma-sm" @click.native="addNotesFn"/>
-          <q-btn no-caps label="Delete" color="red" text-color="white" class="full-width q-ma-sm" @click.native="deleteTask"/>
+          <q-btn-group spread>
+            <!-- <q-btn no-caps label="Delegate" color="grey-7" text-color="white" class="full-width q-ma-sm"/> -->
+            <q-btn no-caps label="Edit" color="grey-9" text-color="white"  @click.native="editTaskFn"/>
+            <q-btn no-caps label="Add Notes" color="grey-9"  @click.native="addNotesFn"/>
+            <q-btn no-caps label="Delete" color="grey-9" text-color="white" @click.native="deleteTask"/>
+          </q-btn-group>
       </q-card-section>
       <q-separator dark />
       <q-card-section class="q-pa-sm" v-show="task.notes" >
-        <q-expansion-item expand-separator label="Notes" >
-          <q-scroll-area style="height: 250px;">
+        <!-- <q-expansion-item expand-separator label="Notes" > -->
+          <!-- <q-scroll-area style="height: 100vh;"> -->
             <q-timeline responsive dark color="secondary">
-              <q-timeline-entry v-for="singleNote in task.notes"  v-bind:key="singleNote.added"
+              <q-timeline-entry v-for="singleNote in sortedNotesList"  v-bind:key="singleNote.added"
                 v-bind:subtitle="singleNote.added | formatDate">
                 <div>
                   {{singleNote.text}}
                 </div>
               </q-timeline-entry>
             </q-timeline>
-          </q-scroll-area>
-        </q-expansion-item>
+          <!-- </q-scroll-area> -->
+        <!-- </q-expansion-item> -->
       </q-card-section>
     </q-card>
     <q-dialog v-model="deleteConfirm" persistent>
@@ -67,6 +69,7 @@
 
 <script>
 import { date } from 'quasar'
+import _ from 'underscore'
 import UpdateTask from '../components/updateTask'
 import AddNotesModal from '../components/addNotesModal'
 
@@ -76,6 +79,11 @@ export default {
     task: Object
   },
   components: { UpdateTask, AddNotesModal },
+  computed: {
+    sortedNotesList: function () {
+      return _.sortBy(this.task.notes, 'added').reverse()
+    }
+  },
   data () {
     return {
       deleteConfirm: false,
@@ -110,7 +118,7 @@ export default {
       this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + keyRef).remove()
       this.$q.notify({
         message: 'Task Deleted',
-        color: 'primary',
+        color: 'grey-9',
         textColor: 'white',
         icon: 'check'
       })

@@ -13,8 +13,8 @@
     <q-input label="Purpose of the group *" dark type="textarea" rows="2" v-model="prj.description" class="q-ma-sm" stack-label
       :rules="[ val => val && val.length > 0 || 'Please add few lines about project / group']"
     />
-  <q-btn color="primary" type="submit" class="full-width q-mt-md" >
-      <span v-if="!loading">Add Project / Group</span>
+  <q-btn color="grey-9" type="submit" class="full-width q-mt-md" >
+      <span v-if="!loading">Add Group</span>
       <q-spinner-dots v-else/>
   </q-btn>
 </q-form>
@@ -85,11 +85,11 @@ export default {
         })
       } else {
         this.$q.notify({
-          message: 'Project added',
-          color: 'primary',
+          message: 'Group added',
+          color: 'grey-9',
           textColor: 'white'
         })
-        this.$router.go(-1)
+        this.$router.push('home')
       }
       this.loading = false
     }

@@ -17,7 +17,7 @@
                   val => val !== null && val !== '' || 'You need to enter OTP'
               ]"
             />
-          <q-btn color="primary" type="submit" no-caps>
+          <q-btn color="grey-9" type="submit" no-caps>
             <span v-if="!loading">Set Profile</span>
             <q-spinner-dots v-else/>
           </q-btn>
@@ -63,13 +63,12 @@ export default {
         if (errorInUpdate != null) {
           this.$q.notify({
             message: 'Error occured',
-            type: 'negative'
+            color: 'negative'
           })
         } else {
           this.$v.$reset()
           this.$q.notify({
             message: 'Profile Updated',
-            color: 'primary',
             textColor: 'white'
           })
           this.$router.push('home')
