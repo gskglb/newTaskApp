@@ -5,8 +5,16 @@
         <q-list dark>
           <q-item>
             <q-item-section>
-              <q-item-label overline>START &nbsp;: {{task.start_date_time | formatDate}}</q-item-label>
-              <q-item-label overline>END &nbsp;&nbsp;&nbsp; : {{task.end_date_time | formatDate}}</q-item-label>
+              <q-item-label overline v-if="!isUndefined(task.start_date_time)">START &nbsp;: {{task.start_date_time | formatDate}}</q-item-label>
+              <q-item-label overline v-else>
+                START &nbsp;: <q-btn no-caps flat dense unelevated label="Set" color="grey-9" text-color="white"  @click.native="editTaskFn"/>
+              </q-item-label>
+
+              <q-item-label overline v-if="!isUndefined(task.end_date_time)">END &nbsp;&nbsp;&nbsp; : {{task.end_date_time | formatDate}}</q-item-label>
+              <q-item-label overline v-else>
+                END &nbsp;&nbsp;&nbsp; : <q-btn no-caps flat dense unelevated label="Set" color="grey-9" text-color="white"  @click.native="editTaskFn"/>
+              </q-item-label>
+
               <!-- <q-item-label>{{record.title | limitTitle}}</q-item-label>
               <q-item-label caption>{{record.summary | limitSummary}}</q-item-label> -->
             </q-item-section>
@@ -94,10 +102,12 @@ export default {
   },
   filters: {
     formatDate: function (dateString) {
-      if (dateString !== null || dateString !== 'undefined') {
-        return date.formatDate(dateString, 'DD-MMM-YY @ h:mm A')
+      console.log('Date String %o', dateString)
+      if (_.isUndefined(dateString)) {
+        console.log('2')
+        return 'not set'
       } else {
-        return 'Not Defined'
+        return date.formatDate(dateString, 'DD-MMM-YY @ h:mm A')
       }
     },
     limitText: function (input) {
@@ -110,6 +120,10 @@ export default {
 
   },
   methods: {
+    isUndefined (data) {
+      console.log('Undefined? ', _.isUndefined(data))
+      return _.isUndefined(data)
+    },
     async deleteTask () {
       this.deleteConfirm = true
     },

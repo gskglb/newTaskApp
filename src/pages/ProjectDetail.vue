@@ -8,15 +8,18 @@
 import ProjectDetail from '../components/projectDetail'
 
 export default {
-  name: 'TaskDetailPage',
+  name: 'ProjectDetailPage',
   components: { ProjectDetail },
+
   data () {
     return {
+      id: this.$route.params.id,
       project: this.$route.params.project
     }
   },
   created () {
-    this.$bus.$emit('setTitleAndSlogan', { title: this.$route.params.project.name, slogan: '' })
+    console.log(this.project)
+    this.$bus.$emit('setTitleAndSlogan', { title: this.project.name, slogan: '' })
   }
 }
 </script>

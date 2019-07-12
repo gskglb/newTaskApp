@@ -2,11 +2,11 @@
   <div>
     <q-card dark class="bg-grey-10" text-color="white" flat square>
      <q-card-section class="q-pa-sm">
-    <q-banner dense rounded inline-actions class="text-white bg-grey-9">
-      <div class="text-h6 absolute-center">
-        PC : {{project.participantCode}}
-      </div>
-    </q-banner>
+      <q-banner dense rounded inline-actions class="text-white bg-grey-9">
+        <div class="text-h6 absolute-center">
+          PC : {{this.project.participantCode}}
+        </div>
+      </q-banner>
       </q-card-section>
     </q-card>
 
@@ -24,6 +24,14 @@ export default {
   props: {
     project: Object
   },
+  watch: {
+    '$route' (to, from) {
+      console.log(to, from)
+    },
+    'project' (to, from) {
+      console.log(to, from)
+    }
+  },
   data () {
     return {
     }
@@ -34,11 +42,6 @@ export default {
     async addGroupTask () {
       this.$router.push('newGroupTask')
     }
-  },
-  created () {
-    this.$bus.$emit('setTitleAndSlogan', { title: this.project.name, slogan: '' })
-  },
-  beforeDestroy () {
   }
 }
 

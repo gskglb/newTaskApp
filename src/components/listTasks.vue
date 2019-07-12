@@ -8,14 +8,19 @@
     </q-banner> -->
     <q-list v-if="tasksList.length !== 0"  dark>
       <q-item class="q-mb-xs" color="grey-9" clickable  v-ripple v-for="(record) in tasksList" v-bind:key="record.keyRef" @click.native="taskDetail(record)">
+        <q-item-section avatar>
+          <q-checkbox v-model=record.completed dark dense class="q-pa-xs" @input="checkUncheck(record)"/>
+        </q-item-section>
         <q-item-section>
           <!-- <q-item-label overline>{{record.start_date_time | formatDate}}</q-item-label> -->
-          <q-item-label>{{record.title | limitTitle}}</q-item-label>
+          <q-item-label v-if="!record.completed">{{record.title | limitTitle}}</q-item-label>
+          <div v-else style="text-decoration: line-through">{{record.title | limitTitle}}</div>
+
           <!-- <q-item-label caption>{{record.summary | limitSummary}}</q-item-label> -->
         </q-item-section>
-        <q-item-section side top>
+        <!-- <q-item-section side top>
           <q-item-label caption>{{record.percentage_completion}} %</q-item-label>
-        </q-item-section>
+        </q-item-section> -->
       <q-separator spaced dark />
       </q-item>
     </q-list>
@@ -92,6 +97,9 @@ export default {
   methods: {
     taskDetail (record) {
       this.$router.push({ name: 'taskDetail', params: { task: record } })
+    },
+    checkUncheck (record) {
+      console.log(record.completed)
     }
   }
 

@@ -26,8 +26,12 @@ export default function (/* { store, ssrContext } */) {
   Router.beforeEach((to, from, next) => {
     const currentUser = AUTH.currentUser
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-    if (requiresAuth && !currentUser) {
-      next('/login')
+    if (requiresAuth) {
+      if (!currentUser) {
+        next('/login')
+      } else {
+        next()
+      }
     } else {
       next()
     }

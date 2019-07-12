@@ -1,38 +1,5 @@
 <template>
-      <!-- <q-list>
-        <q-item-label header>Groups</q-item-label>
-        <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="school" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Docs</q-item-label>
-            <q-item-label caption>quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list> -->
     <q-list>
-      <q-item>
-        <q-item-section>
-          <q-item-label>
-            <div class="text-subtitle2">
-            Quick Menu
-            </div>
-          </q-item-label>
-        </q-item-section>
-        <!-- <q-item-section side>
-          <q-icon color="grey-9" name="keyboard_arrow_right" />
-        </q-item-section> -->
-      </q-item>
-
-      <q-item clickable v-ripple @click.native="$router.push('home')">
-        <q-item-section>
-          <q-item-label>Home</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <q-icon color="grey-9" name="keyboard_arrow_right" />
-        </q-item-section>
-      </q-item>
       <div class="row">
         <div class="col-4">
           <q-item-label header>Groups</q-item-label>
@@ -65,7 +32,9 @@ export default {
   },
   methods: {
     projectDetail (record) {
-      this.$router.push({ name: 'projectDetail', params: { project: record } })
+      console.log('router push called %o', record)
+      // this.$router.push({ path: `/projectDetail/${record.participantCode}`, params: { project: record } })
+      this.$router.push({ name: 'projectDetail', params: { id: record.participantCode, project: record } })
     },
     async newGroup () {
       this.$router.push('newProject')

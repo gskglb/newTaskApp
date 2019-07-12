@@ -5,51 +5,33 @@
         <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
           <q-icon name="menu" />
         </q-btn>
-        <!-- <q-btn flat dense round @click.native="$router.push('home')">
-          <q-icon name="home" />
-        </q-btn> -->
-
+        <q-separator dark vertical inset />
         <q-toolbar-title>
           {{this.title}}
         </q-toolbar-title>
         <!-- <q-btn flat dense round aria-label="New" @click.native="$router.push('new')">
           <q-icon name="person" />
         </q-btn> -->
+        <q-btn flat dense round @click.native="$router.push({name: 'home'})">
+          <q-icon name="home" />
+        </q-btn>
         <q-btn flat dense round aria-label="Exit" @click.native="signOut">
           <q-icon name="exit_to_app" />
         </q-btn>
       </q-toolbar>
-        <q-tabs
+        <!-- <q-tabs
           inline-label
           class="bg-grey-9 text-white"
         >
-          <!-- <q-route-tab no-caps to="home" name="mails" label="Self" exact/>
-          <q-route-tab no-caps to="group_home" name="alarms" label="Groups" exact/> -->
-        </q-tabs>
+          <q-route-tab no-caps to="home" name="mails" label="Self" exact/>
+          <q-route-tab no-caps to="group_home" name="alarms" label="Groups" exact/>
+        </q-tabs> -->
     </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      bordered
-      content-class="bg-grey-2"
-    >
+    <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-2" >
       <GroupsList />
-      <!-- <q-list>
-        <q-item-label header>Groups</q-item-label>
-        <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="school" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Docs</q-item-label>
-            <q-item-label caption>quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list> -->
     </q-drawer>
-
     <q-page-container>
-      <router-view />
+      <router-view :key="$route.fullPath"/>
     </q-page-container>
   </q-layout>
 </template>

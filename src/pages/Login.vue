@@ -49,6 +49,18 @@ export default {
       password: { required }
     }
   },
+
+  beforeMount () {
+    let router = this.$router
+    this.$auth.onAuthStateChanged(function (user) {
+      if (user) {
+        console.log(user.email)
+        router.push('home')
+      } else {
+        // No user is signed in.
+      }
+    })
+  },
   methods: {
     async onSubmit () {
       let store = this.$store

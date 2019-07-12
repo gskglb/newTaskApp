@@ -74,7 +74,8 @@ module.exports = function (ctx) {
         'QMenu',
         'QTabs',
         'QTab',
-        'QRouteTab'        
+        'QRouteTab',
+        'QCheckbox'
       ],
 
       directives: [

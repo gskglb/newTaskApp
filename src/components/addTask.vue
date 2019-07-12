@@ -1,10 +1,10 @@
 <template>
   <q-form @submit="addTask">
     <div class="row">
-      <div class="col-11">
+      <div class="col-8">
         <q-input label="New Task" dark dense v-model="taskData.title" stack-label/>
       </div>
-      <div class="col-1">
+      <div class="col-4">
         <q-btn no-caps color="grey-9" class="float-right" type="submit">Add</q-btn>
       </div>
     </div>
