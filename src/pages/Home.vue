@@ -1,10 +1,6 @@
 <template>
   <q-page class="bg-grey-10" style="margin-top:0px">
-    <q-card dark class="bg-grey-10" text-color="white" flat square>
-      <q-card-section>
-        <AddTask />
-      </q-card-section>
-    </q-card>
+    <AddTask />
     <q-card dark class="bg-grey-10" text-color="white" flat square>
       <q-card-section>
         <!-- <q-bar class="bg-grey-10 text-white"> -->
@@ -60,6 +56,10 @@ export default {
   },
 
   filters: {
+  },
+
+  beforeMount () {
+    this.$store.dispatch('tasks/populateUserTasks', { db: this.$db, auth: this.$auth })
   },
 
   created () {

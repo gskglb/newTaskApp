@@ -108,7 +108,6 @@ export default {
       this.$router.push({ name: 'taskDetail', params: { task: record } })
     },
     async checkUncheck (record) {
-      console.log(record.completed)
       let errorHappened
       await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + record.keyRef).update(record, function (error) {
         errorHappened = error
@@ -119,6 +118,7 @@ export default {
           type: 'negative'
         })
       } else {
+        this.$store.dispatch('tasks/populateUserTasks', { db: this.$db, auth: this.$auth })
         this.$q.notify({
           message: 'Task Updated',
           color: 'grey-9',

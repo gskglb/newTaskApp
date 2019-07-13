@@ -19,6 +19,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'ProjectDetail',
   props: {
@@ -26,10 +27,8 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      console.log(to, from)
     },
     'project' (to, from) {
-      console.log(to, from)
     }
   },
   data () {

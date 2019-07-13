@@ -17,7 +17,6 @@ export function projectChanged (state, project) {
   } else {
     state.projectsList.splice(index, 1)
     state.completedprojectsList.push(project.val())
-    console.log('project has become completed')
   }
 }
 

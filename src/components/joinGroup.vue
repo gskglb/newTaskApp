@@ -73,7 +73,6 @@ export default {
       this.loading = false
     },
     async addToGroup (groupKey) {
-      console.log('adding now %o', groupKey)
       this.$db.ref('/projects/' + groupKey + '/members/').push({ 'id': this.$auth.currentUser.uid, 'added': new Date() })
       this.$q.notify({
         message: 'You are added to group',

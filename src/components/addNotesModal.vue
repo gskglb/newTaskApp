@@ -28,7 +28,6 @@ export default {
   computed: {
     showModal: {
       get: function () {
-        console.log(this.showNotesModal)
         return this.showNotesModal === true
       },
       set: function (newValue) {

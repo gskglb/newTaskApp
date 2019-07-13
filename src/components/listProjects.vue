@@ -32,7 +32,6 @@ export default {
   },
   methods: {
     projectDetail (record) {
-      console.log('router push called %o', record)
       // this.$router.push({ path: `/projectDetail/${record.participantCode}`, params: { project: record } })
       this.$router.push({ name: 'projectDetail', params: { id: record.participantCode, project: record } })
     },

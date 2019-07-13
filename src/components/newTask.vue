@@ -94,16 +94,13 @@ export default {
     async addTask () {
       let errorInUpdate
       this.loading = true
-      console.log(this.groupId)
       if (_.isUndefined(this.groupId)) {
-        console.log('Adding self task')
         let keyRef = await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/').push()
         this.taskData.keyRef = keyRef.key
         await keyRef.set(this.taskData, function (error) {
           errorInUpdate = error
         })
       } else {
-        console.log('Adding group task')
         let keyRef = await this.$db.ref('/projects/' + this.groupId + '/tasks/').push()
         this.taskData.keyRef = keyRef.key
         await keyRef.set(this.taskData, function (error) {

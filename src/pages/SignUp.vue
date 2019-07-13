@@ -60,7 +60,6 @@ export default {
           .then((result) => {
             if (result.user !== null) {
               this.$db.ref('/profiles/' + this.$auth.currentUser.uid + '/').once('value').then(function (snapshot) {
-                console.log(snapshot.val())
                 if (snapshot.val() !== null && snapshot.val().displayName !== 'undefined' && snapshot.val().displayName !== null) {
                   user.displayName = snapshot.val().displayName
                   router.push('home')

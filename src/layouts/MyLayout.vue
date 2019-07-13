@@ -64,7 +64,7 @@ export default {
         store.dispatch('projects/flush')
         router.push('/')
       }, function (error) {
-        console.log('Sign Out Error %o', error)
+        console.log(error)
       })
     }
   },
@@ -74,45 +74,44 @@ export default {
   },
 
   mounted () {
-    // Register firebase events
-    let tasksRef = this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/')
-    tasksRef.on('child_added', (data) => {
-      this.$store.dispatch('tasks/taskAdded', data)
-    })
+    // // Register firebase events
+    // let tasksRef = this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/')
+    // tasksRef.on('child_added', (data) => {
+    //   this.$store.dispatch('tasks/taskAdded', data)
+    // })
 
-    tasksRef.on('child_changed', (data) => {
-      this.$store.dispatch('tasks/taskChanged', data)
-    })
+    // tasksRef.on('child_changed', (data) => {
+    //   this.$store.dispatch('tasks/taskChanged', data)
+    // })
 
-    tasksRef.on('child_removed', (data) => {
-      this.$store.dispatch('tasks/taskDeleted', data)
-    })
+    // tasksRef.on('child_removed', (data) => {
+    //   this.$store.dispatch('tasks/taskDeleted', data)
+    // })
 
-    tasksRef.once('value', (snap) => {
-      // console.log('initial data loaded!', snap.numChildren() === count)
-    })
-    // Register firebase events
-    let projectsRef = this.$db.ref('/profiles/' + this.$auth.currentUser.uid + '/groups/')
-    projectsRef.on('child_added', (data) => {
-      let grpID = data.val()
-      let store = this.$store
-      this.$db.ref('/projects/' + grpID + '/').once('value').then(function (snapshot) {
-        if (snapshot.val() !== null) {
-          store.dispatch('projects/projectAdded', snapshot)
-        }
-      })
-    })
+    // tasksRef.once('value', (snap) => {
+    // })
+    // // Register firebase events
+    // let projectsRef = this.$db.ref('/profiles/' + this.$auth.currentUser.uid + '/groups/')
+    // projectsRef.on('child_added', (data) => {
+    //   let grpID = data.val()
+    //   let store = this.$store
+    //   this.$db.ref('/projects/' + grpID + '/').once('value').then(function (snapshot) {
+    //     if (snapshot.val() !== null) {
+    //       store.dispatch('projects/projectAdded', snapshot)
+    //     }
+    //   })
+    // })
 
-    projectsRef.on('child_changed', (data) => {
-      this.$store.dispatch('projects/projectChanged', data)
-    })
+    // projectsRef.on('child_changed', (data) => {
+    //   this.$store.dispatch('projects/projectChanged', data)
+    // })
 
-    projectsRef.on('child_removed', (data) => {
-      this.$store.dispatch('projects/projectDeleted', data)
-    })
+    // projectsRef.on('child_removed', (data) => {
+    //   this.$store.dispatch('projects/projectDeleted', data)
+    // })
 
-    projectsRef.once('value', (snap) => {
-    })
+    // projectsRef.once('value', (snap) => {
+    // })
   },
 
   beforeDestroy () {

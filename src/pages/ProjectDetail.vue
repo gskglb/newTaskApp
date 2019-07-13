@@ -1,15 +1,16 @@
 <template>
   <q-page class="bg-grey-10" style="margin-top:0px">
+    <AddTask v-bind:project="project" />
     <ProjectDetail v-bind:project="project" />
   </q-page>
 </template>
 
 <script>
 import ProjectDetail from '../components/projectDetail'
-
+import AddTask from '../components/addTask'
 export default {
   name: 'ProjectDetailPage',
-  components: { ProjectDetail },
+  components: { ProjectDetail, AddTask },
 
   data () {
     return {
@@ -18,7 +19,6 @@ export default {
     }
   },
   created () {
-    console.log(this.project)
     this.$bus.$emit('setTitleAndSlogan', { title: this.project.name, slogan: '' })
   }
 }

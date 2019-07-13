@@ -1,11 +1,5 @@
-// export function firstAssignment ({ commit }, listOfTasks) {
-//   commit('firstAssign', listOfTasks)
-// }
-
 export function taskAdded ({ commit }, newTask) {
-  if (newTask.completed !== true) {
-    commit('taskAdded', newTask)
-  }
+  commit('taskAdded', newTask)
 }
 
 export function taskDeleted ({ commit }, task) {
@@ -19,6 +13,21 @@ export function taskChanged ({ commit }, task) {
 export function flush ({ commit }) {
   return new Promise((resolve, reject) => {
     commit('flush')
+    resolve()
+  })
+}
+
+export function populateUserTasks ({ dispatch, commit }, payLoad) {
+  return new Promise((resolve, reject) => {
+    // fetch tasks from backend .. in this case firebase
+    payLoad.db.ref('/user-tasks/' + payLoad.auth.currentUser.uid + '/').once('value').then(function (snapshot) {
+      if (snapshot.val() !== null) {
+        let tasks = snapshot
+        tasks.forEach(element => {
+          dispatch('taskAdded', element.val())
+        })
+      }
+    })
     resolve()
   })
 }

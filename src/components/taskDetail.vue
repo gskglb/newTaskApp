@@ -102,9 +102,7 @@ export default {
   },
   filters: {
     formatDate: function (dateString) {
-      console.log('Date String %o', dateString)
       if (_.isUndefined(dateString)) {
-        console.log('2')
         return 'not set'
       } else {
         return date.formatDate(dateString, 'DD-MMM-YY @ h:mm A')
@@ -121,7 +119,6 @@ export default {
   },
   methods: {
     isUndefined (data) {
-      console.log('Undefined? ', _.isUndefined(data))
       return _.isUndefined(data)
     },
     async deleteTask () {
@@ -130,6 +127,7 @@ export default {
     async deleteTaskFn () {
       let keyRef = this.task.keyRef
       this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + keyRef).remove()
+      this.$store.dispatch('tasks/taskDeleted', this.task)
       this.$q.notify({
         message: 'Task Deleted',
         color: 'grey-9',

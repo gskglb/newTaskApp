@@ -77,7 +77,6 @@ export default {
   },
   methods: {
     async updateTask (record) {
-      console.log(record.keyRef)
       // if (record.completed === true) {
       //   record.percentage_completion = 100
       // }
@@ -91,6 +90,7 @@ export default {
           type: 'negative'
         })
       } else {
+        this.$store.dispatch('tasks/populateUserTasks', { db: this.$db, auth: this.$auth })
         this.$q.notify({
           message: 'Task Updated',
           color: 'grey-9',
@@ -108,7 +108,6 @@ export default {
   computed: {
     showModal: {
       get: function () {
-        console.log(this.showNotesModal)
         return this.showNotesModal === true
       },
       set: function (newValue) {

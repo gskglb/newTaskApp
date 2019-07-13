@@ -71,10 +71,8 @@ export default {
             profile.groups = []
           }
           profile.groups.push(keyRef.key)
-          console.log('Profile in side %o', profile)
         }
       })
-      console.log('profile outside %o', profile)
       await this.$db.ref('/profiles/' + this.$auth.currentUser.uid + '/').update(profile, function (error) {
         errorInUpdate = error
       })

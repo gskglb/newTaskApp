@@ -1,14 +1,18 @@
 <template>
-  <q-form @submit="addTask">
-    <div class="row">
-      <div class="col-8">
-        <q-input label="New Task" dark dense v-model="taskData.title" stack-label/>
+  <q-card dark class="bg-grey-10" text-color="white" flat square>
+    <q-card-section class="q-pa-sm">
+    <q-form @submit="addTask">
+      <div class="row">
+        <div class="col-8">
+          <q-input label="New Task" dark dense v-model="taskData.title" stack-label/>
+        </div>
+        <div class="col-4">
+          <q-btn no-caps color="grey-9" class="float-right" type="submit">Add</q-btn>
+        </div>
       </div>
-      <div class="col-4">
-        <q-btn no-caps color="grey-9" class="float-right" type="submit">Add</q-btn>
-      </div>
-    </div>
-</q-form>
+    </q-form>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script>
@@ -17,7 +21,7 @@ import _ from 'underscore'
 export default {
   name: 'NewTask',
   props: {
-    groupId: String
+    project: Object
   },
   data () {
     return {
@@ -46,16 +50,14 @@ export default {
     async addTask () {
       let errorInUpdate
       this.loading = true
-      console.log(this.groupId)
-      if (_.isUndefined(this.groupId)) {
+      if (_.isUndefined(this.project)) {
         let keyRef = await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/').push()
         this.taskData.keyRef = keyRef.key
         await keyRef.set(this.taskData, function (error) {
           errorInUpdate = error
         })
       } else {
-        console.log('Adding group task')
-        let keyRef = await this.$db.ref('/projects/' + this.groupId + '/tasks/').push()
+        let keyRef = await this.$db.ref('/projects/' + this.project.keyRef + '/tasks/').push()
         this.taskData.keyRef = keyRef.key
         await keyRef.set(this.taskData, function (error) {
           errorInUpdate = error
@@ -67,6 +69,9 @@ export default {
           type: 'negative'
         })
       } else {
+        // DB has updated. So need to fetch latest data
+        this.$store.dispatch('tasks/populateUserTasks', { db: this.$db, auth: this.$auth })
+        this.taskData.title = ''
         this.$q.notify({
           message: 'Task added',
           color: 'grey-9',

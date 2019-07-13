@@ -169,7 +169,6 @@ export default {
       this.showNotes = false
     },
     async setEdit (newValue) {
-      console.log('me called why')
       this.editTask = false
     }
   },
