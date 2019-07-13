@@ -28,8 +28,10 @@ export default function (/* { store, ssrContext } */) {
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
     if (requiresAuth) {
       if (!currentUser) {
+        console.log('No auth user found - so login')
         next('/login')
       } else {
+        console.log('Auth user found - so regular route')
         next()
       }
     } else {

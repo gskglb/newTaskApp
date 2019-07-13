@@ -42,10 +42,10 @@
           </template>
         </q-input>
 
-        <div class="row">
+        <!-- <div class="row">
           <p class="q-ma-sm">Percentage Completion</p>
           <q-slider dark v-model="taskData.percentage_completion" label label-always snap  :min=0 :max=100 />
-        </div>
+        </div> -->
         <div class="row no-wrap">
           <q-checkbox  v-model="taskData.urgent"  label="Urgent" /> &nbsp;
           <q-checkbox  v-model="taskData.important"  label="Important" />
@@ -78,9 +78,9 @@ export default {
   methods: {
     async updateTask (record) {
       console.log(record.keyRef)
-      if (record.completed === true) {
-        record.percentage_completion = 100
-      }
+      // if (record.completed === true) {
+      //   record.percentage_completion = 100
+      // }
       let errorHappened
       await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + record.keyRef).update(record, function (error) {
         errorHappened = error

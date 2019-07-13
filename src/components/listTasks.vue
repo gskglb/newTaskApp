@@ -15,12 +15,10 @@
           <!-- <q-item-label overline>{{record.start_date_time | formatDate}}</q-item-label> -->
           <q-item-label v-if="!record.completed">{{record.title | limitTitle}}</q-item-label>
           <div v-else style="text-decoration: line-through">{{record.title | limitTitle}}</div>
-
-          <!-- <q-item-label caption>{{record.summary | limitSummary}}</q-item-label> -->
         </q-item-section>
-        <!-- <q-item-section side top>
-          <q-item-label caption>{{record.percentage_completion}} %</q-item-label>
-        </q-item-section> -->
+        <q-item-section side>
+          <q-item-label>{{record | urgetImpIndicator}}</q-item-label>
+        </q-item-section>
       <q-separator spaced dark />
       </q-item>
     </q-list>
@@ -43,6 +41,7 @@ export default {
   computed: {
     tasksList: function () {
       let tasksList = this.$store.getters['tasks/tasksList']
+      let closedTaskList = this.$store.getters['tasks/completedTasksList']
       if (this.filter_option.value === '1') {
         tasksList = _.filter(tasksList, (element) => {
           return element.urgent === true && element.important === true
@@ -59,17 +58,17 @@ export default {
         tasksList = _.filter(tasksList, (element) => {
           return element.urgent === false && element.important === false
         })
-      } else if (this.filter_option.value === '0') {
-        tasksList = _.filter(tasksList, (element) => {
+      } else if (this.filter_option.value === '5') {
+        tasksList = _.filter(closedTaskList, (element) => {
           return element.completed === true
         })
       }
       tasksList = _.sortBy(tasksList, 'start_date_time')
       return tasksList
-    },
-    completedTasksList: function () {
-      return this.$store.getters['tasks/completedTasksList']
     }
+    // completedTasksList: function () {
+    //   return this.$store.getters['tasks/completedTasksList']
+    // }
   },
   filters: {
     formatDate: function (dateString) {
@@ -92,14 +91,41 @@ export default {
       } else {
         return input.substring(0, 100) + ' ...'
       }
+    },
+    urgetImpIndicator: function (record) {
+      let indicator = ''
+      if (record.urgent) {
+        indicator = indicator.concat('Urgent ')
+      }
+      if (record.important) {
+        indicator = indicator.concat('Imp')
+      }
+      return indicator
     }
   },
   methods: {
     taskDetail (record) {
       this.$router.push({ name: 'taskDetail', params: { task: record } })
     },
-    checkUncheck (record) {
+    async checkUncheck (record) {
       console.log(record.completed)
+      let errorHappened
+      await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + record.keyRef).update(record, function (error) {
+        errorHappened = error
+      })
+      if (errorHappened) {
+        this.$q.notify({
+          message: 'Error occured',
+          type: 'negative'
+        })
+      } else {
+        this.$q.notify({
+          message: 'Task Updated',
+          color: 'grey-9',
+          textColor: 'white',
+          icon: 'check'
+        })
+      }
     }
   }
 

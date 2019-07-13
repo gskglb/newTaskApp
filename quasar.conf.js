@@ -9,7 +9,8 @@ module.exports = function (ctx) {
       'axios',
       'vuelidate',
       'firebase',
-      'eventBus'
+      'eventBus',
+      'auth'
     ],
 
     css: [

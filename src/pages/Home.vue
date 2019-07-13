@@ -41,7 +41,9 @@ export default {
         { label: 'Urgent and Important', value: '1' },
         { label: 'Important but Not urgent', value: '2' },
         { label: 'Urgent but not important', value: '3' },
-        { label: 'Neither urgent not important', value: '4' }
+        { label: 'Neither urgent not important', value: '4' },
+        { label: 'Closed Tasks', value: '5' }
+
       ]
     }
   },
