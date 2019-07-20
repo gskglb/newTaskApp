@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import tasks from './tasks'
+import groupTasks from './groupTasks'
 import user from './user'
 import projects from './projects'
 
@@ -16,6 +17,7 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       tasks,
+      groupTasks,
       user,
       projects
     }

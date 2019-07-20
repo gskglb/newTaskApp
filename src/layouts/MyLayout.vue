@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import GroupsList from '../components/listProjects'
+import GroupsList from '../components/listGroups'
 export default {
   name: 'MyLayout',
   components: {

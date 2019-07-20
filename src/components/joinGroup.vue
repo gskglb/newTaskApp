@@ -1,19 +1,10 @@
 <template>
-    <q-list dark>
-      <q-item>
-        <q-item-section>
-          <q-item-label overline>To join group, enter participant code</q-item-label>
-          <q-item-label>
-            <q-form @submit="joinGroup">
-            <q-input dark filled dense v-model="participantCode"
-              :rules="[ val => val && val.length > 0 || 'Participant Code is needed']"
-            />
-            <q-btn type="submit" no-caps label="Join" color="grey-8" text-color="white" class="full-width q-mb-xs"/>
-            </q-form>
-          </q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
+  <q-form @submit="joinGroup">
+  <q-input filled dense v-model="participantCode" placeholder="Enter group code join a group"
+    :rules="[ val => val && val.length > 0 || 'Participant Code is needed']"
+  />
+  <q-btn type="submit" no-caps label="Join" color="grey-8" text-color="white" class="full-width q-mb-xs"/>
+  </q-form>
 </template>
 
 <script>

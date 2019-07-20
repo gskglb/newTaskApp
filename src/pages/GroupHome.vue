@@ -10,7 +10,7 @@
 
 <script>
 // import SelfTaskSummary from '../components/selfTaskSummary'
-import GroupsList from '../components/listProjects'
+import GroupsList from '../components/listGroups'
 import JoinGroup from '../components/joinGroup'
 export default {
   name: 'HomePage',

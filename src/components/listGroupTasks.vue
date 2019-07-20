@@ -28,11 +28,9 @@
 <script>
 import _ from 'underscore'
 import { date } from 'quasar'
-
 export default {
-  name: 'ListTasks',
+  name: 'ListGroupTasks',
   props: {
-    filter_option: String,
     projectRef: String
   },
   data () {
@@ -40,39 +38,35 @@ export default {
   },
   computed: {
     tasksList: function () {
-      let tasksList = null
-      let closedTaskList = null
-      if (_.isUndefined(this.projectRef)) {
-        tasksList = this.$store.getters['tasks/tasksList']
-        closedTaskList = this.$store.getters['tasks/completedTasksList']
-      } else {
-        tasksList = this.$store.getters['groupTasks/tasksList']
-        closedTaskList = this.$store.getters['groupTasks/completedTasksList']
-      }
-      if (this.filter_option === '1') {
-        tasksList = _.filter(tasksList, (element) => {
-          return element.urgent === true && element.important === true
-        })
-      } else if (this.filter_option === '2') {
-        tasksList = _.filter(tasksList, (element) => {
-          return element.urgent === false && element.important === true
-        })
-      } else if (this.filter_option === '3') {
-        tasksList = _.filter(tasksList, (element) => {
-          return element.urgent === true && element.important === false
-        })
-      } else if (this.filter_option === '4') {
-        tasksList = _.filter(tasksList, (element) => {
-          return element.urgent === false && element.important === false
-        })
-      } else if (this.filter_option === '5') {
-        tasksList = _.filter(closedTaskList, (element) => {
-          return element.completed === true
-        })
-      }
+      let tasksList = this.$store.getters['groupTasks/tasksList']
+      // let closedTaskList = this.$store.getters['groupsTasks/completedTasksList']
+      // if (this.filter_option.value === '1') {
+      //   tasksList = _.filter(tasksList, (element) => {
+      //     return element.urgent === true && element.important === true
+      //   })
+      // } else if (this.filter_option.value === '2') {
+      //   tasksList = _.filter(tasksList, (element) => {
+      //     return element.urgent === false && element.important === true
+      //   })
+      // } else if (this.filter_option.value === '3') {
+      //   tasksList = _.filter(tasksList, (element) => {
+      //     return element.urgent === true && element.important === false
+      //   })
+      // } else if (this.filter_option.value === '4') {
+      //   tasksList = _.filter(tasksList, (element) => {
+      //     return element.urgent === false && element.important === false
+      //   })
+      // } else if (this.filter_option.value === '5') {
+      //   tasksList = _.filter(closedTaskList, (element) => {
+      //     return element.completed === true
+      //   })
+      // }
       tasksList = _.sortBy(tasksList, 'start_date_time')
       return tasksList
     }
+    // completedTasksList: function () {
+    //   return this.$store.getters['tasks/completedTasksList']
+    // }
   },
   filters: {
     formatDate: function (dateString) {
@@ -109,32 +103,28 @@ export default {
   },
   methods: {
     taskDetail (record) {
-      console.log(this.projectRef)
-      this.$router.push({ name: 'taskDetail', params: { projectRef: this.projectRef, task: record } })
+      this.$router.push({ name: 'taskDetail', params: { task: record } })
     },
     async checkUncheck (record) {
-      let errorHappened
-      await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + record.keyRef).update(record, function (error) {
-        errorHappened = error
-      })
-      if (errorHappened) {
-        this.$q.notify({
-          message: 'Error occured',
-          type: 'negative'
-        })
-      } else {
-        this.$store.dispatch('tasks/populateUserTasks', { db: this.$db, auth: this.$auth })
-        // this.$q.notify({
-        //   message: 'Task Updated',
-        //   color: 'grey-9',
-        //   textColor: 'white',
-        //   icon: 'check'
-        // })
-      }
+      // let errorHappened
+      // await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + record.keyRef).update(record, function (error) {
+      //   errorHappened = error
+      // })
+      // if (errorHappened) {
+      //   this.$q.notify({
+      //     message: 'Error occured',
+      //     type: 'negative'
+      //   })
+      // } else {
+      //   this.$store.dispatch('tasks/populateUserTasks', { db: this.$db, auth: this.$auth })
+      //   this.$q.notify({
+      //     message: 'Task Updated',
+      //     color: 'grey-9',
+      //     textColor: 'white',
+      //     icon: 'check'
+      //   })
+      // }
     }
-  },
-
-  created () {
   }
 
 }

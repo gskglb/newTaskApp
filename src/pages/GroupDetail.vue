@@ -1,16 +1,18 @@
 <template>
   <q-page class="bg-grey-10" style="margin-top:0px">
     <AddTask v-bind:project="project" />
-    <ProjectDetail v-bind:project="project" />
+    <GroupDetail v-bind:project="project" />
+    <ListTasks v-bind:projectRef="this.project.keyRef"/>
   </q-page>
 </template>
 
 <script>
-import ProjectDetail from '../components/projectDetail'
+import GroupDetail from '../components/groupDetail'
+import ListTasks from '../components/listTasks'
 import AddTask from '../components/addTask'
 export default {
-  name: 'ProjectDetailPage',
-  components: { ProjectDetail, AddTask },
+  name: 'GroupTaskDetail',
+  components: { GroupDetail, ListTasks, AddTask },
 
   data () {
     return {
@@ -20,6 +22,7 @@ export default {
   },
   created () {
     this.$bus.$emit('setTitleAndSlogan', { title: this.project.name, slogan: '' })
+    this.$store.dispatch('groupTasks/populateGroupTasks', { db: this.$db, auth: this.$auth, project: this.project })
   }
 }
 </script>

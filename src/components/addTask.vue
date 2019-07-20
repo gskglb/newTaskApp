@@ -50,6 +50,7 @@ export default {
     async addTask () {
       let errorInUpdate
       this.loading = true
+      let groupTask = false
       if (_.isUndefined(this.project)) {
         let keyRef = await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/').push()
         this.taskData.keyRef = keyRef.key
@@ -58,6 +59,7 @@ export default {
         })
       } else {
         let keyRef = await this.$db.ref('/projects/' + this.project.keyRef + '/tasks/').push()
+        groupTask = true
         this.taskData.keyRef = keyRef.key
         await keyRef.set(this.taskData, function (error) {
           errorInUpdate = error
@@ -70,13 +72,17 @@ export default {
         })
       } else {
         // DB has updated. So need to fetch latest data
-        this.$store.dispatch('tasks/populateUserTasks', { db: this.$db, auth: this.$auth })
+        if (!groupTask) {
+          this.$store.dispatch('tasks/populateUserTasks', { db: this.$db, auth: this.$auth })
+        } else {
+          this.$store.dispatch('groupTasks/populateGroupTasks', { db: this.$db, auth: this.$auth, project: this.project })
+        }
         this.taskData.title = ''
-        this.$q.notify({
-          message: 'Task added',
-          color: 'grey-9',
-          textColor: 'white'
-        })
+        // this.$q.notify({
+        //   message: 'Task added',
+        //   color: 'grey-9',
+        //   textColor: 'white'
+        // })
       }
       this.loading = false
     }

@@ -14,12 +14,6 @@
               <q-item-label overline v-else>
                 END &nbsp;&nbsp;&nbsp; : <q-btn no-caps flat dense unelevated label="Set" color="grey-9" text-color="white"  @click.native="editTaskFn"/>
               </q-item-label>
-
-              <!-- <q-item-label>{{record.title | limitTitle}}</q-item-label>
-              <q-item-label caption>{{record.summary | limitSummary}}</q-item-label> -->
-            </q-item-section>
-            <q-item-section side top>
-              <q-item-label caption>{{task.percentage_completion}} %</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -35,7 +29,6 @@
       <q-separator dark />
       <q-card-section class="q-pa-sm" >
           <q-btn-group spread>
-            <!-- <q-btn no-caps label="Delegate" color="grey-7" text-color="white" class="full-width q-ma-sm"/> -->
             <q-btn no-caps label="Edit" color="grey-9" text-color="white"  @click.native="editTaskFn"/>
             <q-btn no-caps label="Add Notes" color="grey-9"  @click.native="addNotesFn"/>
             <q-btn no-caps label="Delete" color="grey-9" text-color="white" @click.native="deleteTask"/>
@@ -71,7 +64,6 @@
     </q-dialog>
     <UpdateTask v-bind:taskData="task" v-bind:showNotesModal="editTask" />
     <AddNotesModal v-bind:taskData="task"  v-bind:showNotesModal="showNotes"/>
-
   </div>
 </template>
 
@@ -84,7 +76,8 @@ import AddNotesModal from '../components/addNotesModal'
 export default {
   name: 'TaskDetail',
   props: {
-    task: Object
+    task: Object,
+    projectRef: String
   },
   components: { UpdateTask, AddNotesModal },
   computed: {
@@ -126,15 +119,22 @@ export default {
     },
     async deleteTaskFn () {
       let keyRef = this.task.keyRef
-      this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + keyRef).remove()
-      this.$store.dispatch('tasks/taskDeleted', this.task)
+      if (_.isUndefined(this.projectRef)) {
+        console.log('user task delete ')
+        this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + keyRef).remove()
+        this.$store.dispatch('tasks/taskDeleted', this.task)
+      } else {
+        console.log('Group delete task')
+        this.$db.ref('/projects/' + this.projectRef + '/tasks/' + keyRef).remove()
+        this.$store.dispatch('groupTasks/taskDeleted', this.task)
+      }
       this.$q.notify({
         message: 'Task Deleted',
         color: 'grey-9',
         textColor: 'white',
         icon: 'check'
       })
-      this.$router.go(-1)
+      this.$router.push('home')
     },
     async editTaskFn () {
       this.editTask = true
@@ -150,6 +150,7 @@ export default {
     }
   },
   created () {
+    console.log('Inside taskDetail %o', this.projectRef)
     this.$bus.$on('setNotesVisibility', this.setNotesVisibilityValue)
     this.$bus.$on('setEdit', this.setEdit)
     this.$bus.$emit('setTitleAndSlogan', { title: this.task.title, slogan: '' })

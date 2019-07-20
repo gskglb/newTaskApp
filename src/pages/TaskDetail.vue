@@ -1,6 +1,6 @@
 <template>
   <q-page class="bg-grey-10" style="margin-top:0px">
-    <TaskDetail v-bind:task="task" />
+    <TaskDetail v-bind:task="task" v-bind:projectRef="projectRef" />
   </q-page>
 </template>
 
@@ -12,7 +12,8 @@ export default {
   components: { TaskDetail },
   data () {
     return {
-      task: this.$route.params.task
+      task: this.$route.params.task,
+      projectRef: this.$route.params.projectRef
     }
   },
   created () {

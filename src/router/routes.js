@@ -37,7 +37,7 @@ const routes = [
       { path: 'home', name: 'home', component: () => import('pages/Home.vue') },
       { path: 'group_home', name: 'group_home', component: () => import('pages/GroupHome.vue') },
       { path: 'taskDetail', name: 'taskDetail', component: () => import('pages/TaskDetail') },
-      { path: 'projectDetail/:id', name: 'projectDetail', component: () => import('pages/ProjectDetail') }
+      { path: 'projectDetail/:id', name: 'projectDetail', component: () => import('pages/GroupDetail') }
     ]
   }
 ]

@@ -1,17 +1,7 @@
 <template>
   <q-page class="bg-grey-10" style="margin-top:0px">
     <AddTask />
-    <q-card dark class="bg-grey-10" text-color="white" flat square>
-      <q-card-section>
-        <!-- <q-bar class="bg-grey-10 text-white"> -->
-        <q-select dark v-model = "filter_option" :options="options"  @input="setFilter"  />
-          <!-- <q-space />
-          <q-btn no-caps color="grey-9" label="New" @click="$router.push('new')" /> -->
-        <!-- </q-bar> -->
-      </q-card-section>
-      <q-card-section>
-      </q-card-section>
-    </q-card>
+    <FilterComponent />
     <ListTasks v-bind:filter_option="filter_option" />
   </q-page>
 </template>
@@ -22,48 +12,31 @@
 <script>
 import ListTasks from '../components/listTasks'
 import AddTask from '../components/addTask'
+import FilterComponent from '../components/filter'
+
 export default {
-  name: 'PageIndex',
-  components: { ListTasks, AddTask },
+  name: 'HomePage',
+  components: { ListTasks, AddTask, FilterComponent },
 
   data () {
     return {
-      filter_start_date_time: '-1',
-      filter_priority: '-1',
-      filter_selected_priority: 'All',
-      filter_option: { label: 'All Open Tasks', value: '-1' },
-      options: [
-        { label: 'All Open Tasks', value: '-1' },
-        { label: 'Urgent and Important', value: '1' },
-        { label: 'Important but Not urgent', value: '2' },
-        { label: 'Urgent but not important', value: '3' },
-        { label: 'Neither urgent not important', value: '4' },
-        { label: 'Closed Tasks', value: '5' }
-
-      ]
+      filter_option: '-1'
     }
   },
 
   methods: {
-    async setFilter (val) {
-      this.filter_option = val
+    setFilter: function (payload) {
+      this.filter_option = payload.filterValue
     }
-  },
-  watch: {
-  },
-
-  computed: {
-  },
-
-  filters: {
   },
 
   beforeMount () {
+    this.$bus.$on('setFilter', this.setFilter)
     this.$store.dispatch('tasks/populateUserTasks', { db: this.$db, auth: this.$auth })
   },
 
   created () {
-    this.$bus.$emit('setTitleAndSlogan', { title: 'Tasks', slogan: '' })
+    this.$bus.$emit('setTitleAndSlogan', { title: 'Your tasks', slogan: '' })
   }
 }
 </script>
