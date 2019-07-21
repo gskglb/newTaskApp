@@ -14,10 +14,12 @@
 </template>
 
 <script>
+import _ from 'underscore'
 export default {
   name: 'AddNotesModal',
   props: {
     taskData: Object,
+    projectRef: String,
     showNotesModal: Boolean
   },
   data () {
@@ -47,9 +49,17 @@ export default {
       }
       this.taskData.notes.push({ 'text': this.notesText, 'added': new Date() })
       let errorHappened
-      await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + this.taskData.keyRef).update(this.taskData, function (error) {
-        errorHappened = error
-      })
+
+      if (_.isUndefined(this.projectRef)) {
+        await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + this.taskData.keyRef).update(this.taskData, function (error) {
+          errorHappened = error
+        })
+      } else {
+        console.log('adding notes to group data')
+        await this.$db.ref('/projects/' + this.projectRef + '/tasks/' + this.taskData.keyRef).update(this.taskData, function (error) {
+          errorHappened = error
+        })
+      }
       if (errorHappened) {
         this.$q.notify({
           message: 'Error occured',
@@ -58,7 +68,7 @@ export default {
       } else {
         this.$q.notify({
           message: 'Notes Updated',
-          color: 'primary',
+          color: 'grey-10',
           textColor: 'white',
           icon: 'check'
         })

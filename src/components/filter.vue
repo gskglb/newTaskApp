@@ -1,5 +1,5 @@
 <template>
-  <q-select dark v-model = "filter_option" :options="options"  @input="setFilter" class="q-pa-md" />
+  <q-select filled dark v-model = "filter_option" :options="options"  @input="setFilter" class="q-pa-md" />
 </template>
 
 <script>

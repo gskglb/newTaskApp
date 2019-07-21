@@ -62,12 +62,14 @@
 </template>
 
 <script>
+import _ from 'underscore'
 export default {
   name: 'UpdateTask',
   components: {
   },
   props: {
     taskData: Object,
+    projectRef: String,
     showNotesModal: Boolean
   },
   data () {
@@ -77,13 +79,22 @@ export default {
   },
   methods: {
     async updateTask (record) {
-      // if (record.completed === true) {
-      //   record.percentage_completion = 100
-      // }
       let errorHappened
-      await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + record.keyRef).update(record, function (error) {
-        errorHappened = error
-      })
+      console.log('REcord here %o', record)
+      if (_.isUndefined(this.projectRef)) {
+        console.log('user task update ')
+        await this.$db.ref('/user-tasks/' + this.$auth.currentUser.uid + '/' + record.keyRef).update(record, function (error) {
+          errorHappened = error
+        })
+        this.$store.dispatch('tasks/populateUserTasks', { db: this.$db, auth: this.$auth })
+      } else {
+        console.log('Group task update')
+        await this.$db.ref('/projects/' + this.projectRef + '/tasks/' + record.keyRef).update(record, function (error) {
+          errorHappened = error
+        })
+        this.$store.dispatch('groupTasks/populateGroupTasks', { db: this.$db, auth: this.$auth, projectRef: this.projectRef })
+      }
+
       if (errorHappened) {
         this.$q.notify({
           message: 'Error occured',

@@ -22,7 +22,7 @@ export default {
   },
   created () {
     this.$bus.$emit('setTitleAndSlogan', { title: this.project.name, slogan: '' })
-    this.$store.dispatch('groupTasks/populateGroupTasks', { db: this.$db, auth: this.$auth, project: this.project })
+    this.$store.dispatch('groupTasks/populateGroupTasks', { db: this.$db, auth: this.$auth, projectRef: this.project.keyRef })
   }
 }
 </script>

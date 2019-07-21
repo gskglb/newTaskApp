@@ -21,7 +21,7 @@ export default {
     $props: {
       handler (newVal, oldVal) {
         console.log(newVal)
-        // this.$store.dispatch('groupTasks/populateGroupTasks', { db: this.$db, auth: this.$auth, project: this.project })
+        // this.$store.dispatch('groupTasks/populateGroupTasks', { db: this.$db, auth: this.$auth, projectRef: this.project.keyRef })
       },
       deep: true,
       immediate: true

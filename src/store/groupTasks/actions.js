@@ -18,11 +18,11 @@ export function flush ({ commit }) {
 }
 
 export function populateGroupTasks ({ dispatch, commit }, payload) {
-  console.log('Fetching tasks for %o', payload.project.keyRef)
+  console.log('Fetching tasks for %o', payload.projectRef)
   dispatch('flush')
   return new Promise((resolve, reject) => {
     // fetch tasks from backend .. in this case firebase
-    payload.db.ref('/projects/' + payload.project.keyRef + '/tasks/').once('value').then(function (snapshot) {
+    payload.db.ref('/projects/' + payload.projectRef + '/tasks/').once('value').then(function (snapshot) {
       if (snapshot.val() !== null) {
         let tasks = snapshot
         tasks.forEach(element => {

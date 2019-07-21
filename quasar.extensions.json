@@ -10,13 +10,13 @@
     "__internal": {
       "dev": {
         "spa": {
-          "iconHash": "4ccb11f8fcf30f338d32859047fd3ad3"
+          "iconHash": "b3452a394f66493eb7af96a20901125b"
         }
       },
       "build": {
         "cordova": {
-          "iconHash": "4ccb11f8fcf30f338d32859047fd3ad3",
-          "splashscreenHash": "f3a37d8ad9d13f082b8489c14e78183f",
+          "iconHash": "b3452a394f66493eb7af96a20901125b",
+          "splashscreenHash": "e92ea840f6fe25f0bec8f7781cc4fb97",
           "splashscreenType": "pure",
           "backgroundColor": "#000074"
         }

@@ -62,8 +62,8 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <UpdateTask v-bind:taskData="task" v-bind:showNotesModal="editTask" />
-    <AddNotesModal v-bind:taskData="task"  v-bind:showNotesModal="showNotes"/>
+    <UpdateTask v-bind:taskData="task" v-bind:projectRef="projectRef" v-bind:showNotesModal="editTask" />
+    <AddNotesModal v-bind:taskData="task" v-bind:projectRef="projectRef" v-bind:showNotesModal="showNotes"/>
   </div>
 </template>
 
@@ -150,7 +150,6 @@ export default {
     }
   },
   created () {
-    console.log('Inside taskDetail %o', this.projectRef)
     this.$bus.$on('setNotesVisibility', this.setNotesVisibilityValue)
     this.$bus.$on('setEdit', this.setEdit)
     this.$bus.$emit('setTitleAndSlogan', { title: this.task.title, slogan: '' })

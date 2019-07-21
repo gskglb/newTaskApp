@@ -4,7 +4,7 @@
     <q-form @submit="addTask">
       <div class="row">
         <div class="col-8">
-          <q-input label="New Task" dark dense v-model="taskData.title" stack-label/>
+          <q-input placeholder="Enter new task here" dark dense v-model="taskData.title"/>
         </div>
         <div class="col-4">
           <q-btn no-caps color="grey-9" class="float-right" type="submit">Add</q-btn>
@@ -75,7 +75,7 @@ export default {
         if (!groupTask) {
           this.$store.dispatch('tasks/populateUserTasks', { db: this.$db, auth: this.$auth })
         } else {
-          this.$store.dispatch('groupTasks/populateGroupTasks', { db: this.$db, auth: this.$auth, project: this.project })
+          this.$store.dispatch('groupTasks/populateGroupTasks', { db: this.$db, auth: this.$auth, projectRef: this.project.keyRef })
         }
         this.taskData.title = ''
         // this.$q.notify({
