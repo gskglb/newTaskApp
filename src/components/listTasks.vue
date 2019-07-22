@@ -6,10 +6,10 @@
     <!-- <q-banner v-if="tasksList.length !== 0" inline-actions class="text-white bg-grey-9 q-mb-xs">
       Tap on the task for details.
     </q-banner> -->
-    <q-list v-if="tasksList.length !== 0"  dark>
-      <q-item class="q-mb-xs" color="grey-9" clickable  v-ripple v-for="(record) in tasksList" v-bind:key="record.keyRef" @click.native="taskDetail(record)">
+    <q-list v-if="tasksList.length !== 0">
+      <q-item class="q-mb-xs" clickable  v-ripple v-for="(record) in tasksList" v-bind:key="record.keyRef" @click.native="taskDetail(record)">
         <q-item-section avatar>
-          <q-checkbox v-model=record.completed dark dense class="q-pa-xs" @input="checkUncheck(record)"/>
+          <q-checkbox v-model=record.completed dense class="q-pa-xs" @input="checkUncheck(record)"/>
         </q-item-section>
         <q-item-section>
           <!-- <q-item-label overline>{{record.start_date_time | formatDate}}</q-item-label> -->
@@ -19,7 +19,7 @@
         <q-item-section side>
           <q-item-label>{{record | urgetImpIndicator}}</q-item-label>
         </q-item-section>
-      <q-separator spaced dark />
+      <q-separator spaced />
       </q-item>
     </q-list>
   </div>

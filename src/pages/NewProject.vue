@@ -1,5 +1,5 @@
 <template>
-   <q-page padding class="bg-grey-10">
+   <q-page padding>
     <NewProject />
   </q-page>
 </template>

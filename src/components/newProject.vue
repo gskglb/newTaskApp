@@ -1,16 +1,16 @@
 <template>
   <q-form @submit="addProject">
-    <q-input label="Participant Code" readonly dark filled v-model="joiningRef" class="q-ma-sm" stack-label
+    <q-input label="Participant Code" readonly filled v-model="joiningRef" class="q-ma-sm" stack-label
       :rules="[ val => val && val.length > 0 || 'Project / Group Name is required']"
     />
     <q-banner class="bg-grey-3">
       You should provide this participant code to people who want to join this group
     </q-banner>
 
-    <q-input label="Project / Group Name  *" dark v-model="prj.name" class="q-ma-sm" stack-label
+    <q-input label="Project / Group Name  *" v-model="prj.name" class="q-ma-sm" stack-label
       :rules="[ val => val && val.length > 0 || 'Project / Group Name is required']"
     />
-    <q-input label="Purpose of the group *" dark type="textarea" rows="2" v-model="prj.description" class="q-ma-sm" stack-label
+    <q-input label="Purpose of the group *" type="textarea" rows="2" v-model="prj.description" class="q-ma-sm" stack-label
       :rules="[ val => val && val.length > 0 || 'Please add few lines about project / group']"
     />
   <q-btn color="grey-9" type="submit" class="full-width q-mt-md" >

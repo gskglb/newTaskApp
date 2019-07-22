@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-card dark class="bg-grey-10" color="white" flat square>
+    <q-card flat square>
      <q-card-section class="q-pa-sm">
      <div class="h6">
         Participant Code : {{this.project.participantCode}}

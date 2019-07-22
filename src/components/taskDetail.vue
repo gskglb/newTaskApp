@@ -1,18 +1,18 @@
 <template>
   <div>
-    <q-card dark class="bg-grey-10" text-color="white" flat square>
+    <q-card flat square>
       <q-card-section>
-        <q-list dark>
+        <q-list>
           <q-item>
             <q-item-section>
               <q-item-label overline v-if="!isUndefined(task.start_date_time)">START &nbsp;: {{task.start_date_time | formatDate}}</q-item-label>
               <q-item-label overline v-else>
-                START &nbsp;: <q-btn no-caps flat dense unelevated label="Set" color="grey-9" text-color="white"  @click.native="editTaskFn"/>
+                START &nbsp;: Not set, you can set via edit
               </q-item-label>
 
               <q-item-label overline v-if="!isUndefined(task.end_date_time)">END &nbsp;&nbsp;&nbsp; : {{task.end_date_time | formatDate}}</q-item-label>
               <q-item-label overline v-else>
-                END &nbsp;&nbsp;&nbsp; : <q-btn no-caps flat dense unelevated label="Set" color="grey-9" text-color="white"  @click.native="editTaskFn"/>
+                END &nbsp;&nbsp;&nbsp; : Not set, you can set via edit
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -26,7 +26,7 @@
       <q-card-section class="q-pa-sm" >
         <div class="text-justify">{{task.summary}} </div>
       </q-card-section>
-      <q-separator dark />
+      <q-separator />
       <q-card-section class="q-pa-sm" >
           <q-btn-group spread>
             <q-btn no-caps label="Edit" color="grey-9" text-color="white"  @click.native="editTaskFn"/>
@@ -34,11 +34,11 @@
             <q-btn no-caps label="Delete" color="grey-9" text-color="white" @click.native="deleteTask"/>
           </q-btn-group>
       </q-card-section>
-      <q-separator dark />
+      <q-separator />
       <q-card-section class="q-pa-sm" v-show="task.notes" >
         <!-- <q-expansion-item expand-separator label="Notes" > -->
           <!-- <q-scroll-area style="height: 100vh;"> -->
-            <q-timeline responsive dark color="secondary">
+            <q-timeline responsive color="secondary">
               <q-timeline-entry v-for="singleNote in sortedNotesList"  v-bind:key="singleNote.added"
                 v-bind:subtitle="singleNote.added | formatDate">
                 <div>
@@ -51,9 +51,9 @@
       </q-card-section>
     </q-card>
     <q-dialog v-model="deleteConfirm" persistent>
-      <q-card dark class="q-pa-md bg-grey-9" text-color="white" flat square style="width: 300px; max-width: 80vw;">
+      <q-card  class="q-pa-md" flat square style="width: 300px; max-width: 80vw;">
         <q-card-section class="row items-center">
-          <q-avatar size="30px" icon="block"  text-color="white" />
+          <q-avatar size="30px" icon="block" />
           <span class="q-ml-sm">Are you Sure ?</span>
         </q-card-section>
         <q-card-actions align="center">

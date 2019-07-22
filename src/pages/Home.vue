@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-grey-10" style="margin-top:0px">
+  <q-page  style="margin-top:0px">
     <AddTask />
     <FilterComponent />
     <ListTasks v-bind:filter_option="filter_option" />

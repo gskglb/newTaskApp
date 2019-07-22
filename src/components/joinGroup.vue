@@ -65,12 +65,32 @@ export default {
     },
     async addToGroup (groupKey) {
       this.$db.ref('/projects/' + groupKey + '/members/').push({ 'id': this.$auth.currentUser.uid, 'added': new Date() })
-      this.$q.notify({
-        message: 'You are added to group',
-        color: 'primary',
-        textColor: 'white',
-        icon: 'info'
+      let profile = null
+      let errorInUpdate = null
+      await this.$db.ref('/profiles/' + this.$auth.currentUser.uid + '/').once('value').then(function (snapshot) {
+        if (snapshot.val() !== null && snapshot.val().displayName !== 'undefined' && snapshot.val().displayName !== null) {
+          profile = snapshot.val()
+          if (profile.groups == null) {
+            profile.groups = []
+          }
+          profile.groups.push(groupKey)
+        }
       })
+      await this.$db.ref('/profiles/' + this.$auth.currentUser.uid + '/').update(profile, function (error) {
+        errorInUpdate = error
+      })
+      if (errorInUpdate != null) {
+        this.$q.notify({
+          message: 'Error occured',
+          type: 'negative'
+        })
+      } else {
+        this.$q.notify({
+          message: 'You have joined the group',
+          color: 'grey-9',
+          textColor: 'white'
+        })
+      }
     }
   }
 }
